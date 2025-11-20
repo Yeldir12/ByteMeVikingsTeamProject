@@ -18,15 +18,31 @@
  */
 
 const express = require("express");
-
 const app = express();
+app.use(express.static('middlewares/public'));
 
+//This is our root route (just / )
 app.get('/', (req, res) => {
     res.send('<h1>Hello World</h1>'); // res.send('Hello World');
 });
 
 const port = process.env.PORT || 3000;
-
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
+// Include route files
+const indexRoute = require('./routes/homepage');
+app.use('/home', indexRoute);
+
+const questBoard = require('./routes/quest-board');
+app.use('/quest-board', questBoard);
+
+const questChat = require('./routes/quest-chat');
+app.use('/quest-chat', questChat);
+
+const requestHelp = require('./routes/request-help');
+app.use('/request-help', requestHelp);
+
+const character = require('./routes/character');
+app.use('/character', character);
