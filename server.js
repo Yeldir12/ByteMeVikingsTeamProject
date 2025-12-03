@@ -31,7 +31,6 @@ app.use(express.static('middlewares/public'));
 //     res.send('<h1>Hello World</h1>'); // res.send('Hello World');
 // });
 
-
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server running on localhost:${port}`);
@@ -47,8 +46,8 @@ app.use('/quest-board', questBoard);
 const questChat = require('./routes/quest-chat');
 app.use('/quest-chat', questChat);
 
-const requestHelp = require('./routes/request-help');
-app.use('/request-help', requestHelp);
+const requestHelp = require('./routes/quest-board');
+app.use('/quest-board', requestHelp);
 
 const character = require('./routes/character');
 app.use('/character', character);

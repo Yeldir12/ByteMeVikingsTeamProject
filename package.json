@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Yeldir12/ByteMeVikingsTeamProject#readme",
   "dependencies": {
     "ejs": "^3.1.10",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mongodb": "^7.0.0"
   }
 }
