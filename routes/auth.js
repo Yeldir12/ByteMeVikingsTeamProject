@@ -14,38 +14,43 @@ function saveUsers(users) {
     fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
 }
 
+// ⭐ Step 6: redirect logged-in users away from login/register
+function redirectIfLoggedIn(req, res, next) {
+    if (req.session.user) {
+        return res.redirect("/");
+    }
+    next();
+}
+
 // Register Page
-router.get("/register", (req, res) => {
+router.get("/register", redirectIfLoggedIn, (req, res) => {
     res.render("register");
 });
 
-// Submit Register Form
+// Login Page
+router.get("/login", redirectIfLoggedIn, (req, res) => {
+    res.render("login");
+});
+
+// POST register
 router.post("/register", async (req, res) => {
     const { username, password } = req.body;
 
     const users = getUsers();
-
     if (users.find(u => u.username === username)) {
         return res.send("User already exists");
     }
 
     const hashed = await bcrypt.hash(password, 10);
-
     users.push({ username, password: hashed });
     saveUsers(users);
 
     res.redirect("/login");
 });
 
-// Login Page
-router.get("/login", (req, res) => {
-    res.render("login");
-});
-
-// Submit Login Form
+// POST login
 router.post("/login", async (req, res) => {
     const { username, password } = req.body;
-
     const users = getUsers();
     const user = users.find(u => u.username === username);
 
