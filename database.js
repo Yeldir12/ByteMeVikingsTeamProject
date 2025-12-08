@@ -1,30 +1,38 @@
-
-const { MongoClient, ServerApiVersion } = require('mongodb');
-
-//dotenv is the .env file in the folder that holds environment variables
-require('dotenv').config();//Config loads environment variables
-
-const uri = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@vikingsboard.owjb1ty.mongodb.net/?appName=VikingsBoard`;
-console.log(uri)
+const { MongoClient, ServerApiVersion } = require("mongodb");
+const dotenv = require("dotenv");
+ 
+// Load environment variables from .env file
+dotenv.config();
+ 
+const userName = process.env.MONGODB_USERNAME;
+const password = process.env.MONGODB_PASSWORD;
+ 
+const uri = `mongodb+srv://${userName}:${password}@questdatabase.pqhnow6.mongodb.net/?appName=QuestDatabase`;
+ 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
 });
-
+ 
+// Connect to the database and set up the collection
+const db = client.db("board-data");
+const collectionName = db.collection("accounts");
+ 
+// Export client, db, and collectionName for use in other files
+module.exports = { client, db, collectionName };
+ 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
+    console.log("CONNECTING...");
     await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
+    console.log("CONNECTED to MongoDB yay!");
+  } catch (err) {
+    console.error("Error connecting to MongoDB:",err);
   }
 }
+ 
 run().catch(console.dir);

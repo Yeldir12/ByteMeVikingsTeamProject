@@ -49,6 +49,10 @@ app.use((err, req, res, next) => {
   res.status(500).render("500");
 });
 
+//Database
+const database = require("./database");
+database.connect();
+
 // Start server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
