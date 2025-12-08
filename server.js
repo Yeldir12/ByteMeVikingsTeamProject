@@ -1,36 +1,55 @@
-// const http = require('http');
-// const server = http.createServer((req, res) => {
-//     res.writeHead(200, { 'Content-Type': 'text/html' });
-//     res.write('Hello World');
-//     res.end();
-// });
-// const port = 3000;
-// server.listen(port, () => {
-//     console.log(`Server running at http://localhost:${port}/`);
-// });
-
-/**
- * Creating a server using Node.js and Express.js
- * npm init -y
- * npm install express
- * npm install ejs
- */
-
-
+// Basic setup
 const express = require("express");
-const path = require('path');
+const session = require("express-session");
+const bcrypt = require("bcrypt");
+const path = require("path");
+
 const app = express();
 
-app.set('view engine', 'ejs'); // tell Express to use EJS
-//Set the views to be in the views folder
-app.set('views', path.join(__dirname, 'middlewares/views')); // folder for EJS files
-app.use(express.static('middlewares/public'));
+// View engine
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "middlewares/views"));
+app.use(express.static("middlewares/public"));
+app.use(express.urlencoded({ extended: true }));
 
-//This is our root route (just / )
-// app.get('/', (req, res) => {
-//     res.send('<h1>Hello World</h1>'); // res.send('Hello World');
-// });
+// Sessions (only once!)
+app.use(
+  session({
+    secret: "supersecretkey",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 }, // 1 hour
+  })
+);
 
+// Routes
+const homeRoute = require("./routes/index");
+app.use("/", homeRoute);
+
+const questBoard = require("./routes/quest-board");
+app.use("/quest-board", questBoard);
+
+const questChat = require("./routes/quest-chat");
+app.use("/quest-chat", questChat);
+
+const character = require("./routes/character");
+app.use("/character", character);
+
+const authRoutes = require("./routes/auth");
+app.use("/", authRoutes);
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).render("404");
+});
+
+// 500 handler (must have 4 params!)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).render("500");
+});
+
+// Start server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server running on localhost:${port}`);
@@ -51,9 +70,6 @@ app.use('/quest-board', requestHelp);
 
 const character = require('./routes/character');
 app.use('/character', character);
-
-const contactHelp = require('./routes/request-help');
-app.use('/request-help', contactHelp);
 
 
 //Error Handling (MUST BE LAST)

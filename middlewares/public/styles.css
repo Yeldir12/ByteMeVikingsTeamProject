@@ -32,3 +32,53 @@
       bottom: 0;
       width: 100%;
     }
+
+ /* Header container */
+.site-header {
+    width: 100%;
+    background: #2d2d2d;
+    padding: 10px 20px;        /* Reduced padding so it fits */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;   /* Prevents overflow */
+    color: white;
+}
+
+/* Left navigation (Home, Quest Board, etc.) */
+.left-nav a {
+    margin-right: 20px;
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+.left-nav a:hover {
+    text-decoration: underline;
+}
+
+/* Right navigation */
+.right-nav {
+    display: flex;
+    gap: 12px;                /* Slightly smaller spacing */
+}
+
+/* Buttons */
+.btn {
+    padding: 6px 14px;        /* Smaller button padding */
+    background: #4a6cf7;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: 0.2s;
+    white-space: nowrap;      /* Prevent wrapping */
+}
+
+.btn:hover {
+    background: #3b5bdb;
+}
+
+.small-btn {
+    font-size: 0.9rem;
+}
