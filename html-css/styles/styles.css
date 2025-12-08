@@ -27,3 +27,138 @@
       bottom: 0;
       width: 100%;
     }
+
+    /* Reset and base styles */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+h1, h2, h3 {
+  margin-bottom: 10px;
+}
+
+/* Navigation */
+.navbar {
+  background-color: #222;
+  padding: 10px;
+  display: flex;
+  gap: 20px;
+}
+
+.navbar a {
+  color: #ccc;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.navbar a.active {
+  color: #ffcc00;
+}
+
+/* Main layout */
+.character-page {
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+/* Profile Card */
+.profile-card {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 8px;
+  background-color: #ddd;
+}
+
+/* Customization */
+.customization {
+  margin-bottom: 30px;
+}
+
+.custom-option {
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  padding: 6px;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+button {
+  padding: 6px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #444;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #666;
+}
+
+/* Outfit Gallery */
+.outfit-gallery {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.outfit-option {
+  width: 64px;
+  height: 64px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border 0.2s ease;
+}
+
+.outfit-option:hover {
+  border: 2px solid #ffcc00;
+}
+
+/* Progress */
+.progress ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+/* Experience Bar */
+.status-bar {
+  margin-top: 20px;
+}
+
+.progress-container {
+  background-color: #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 24px;
+}
+
+.progress-bar {
+  background-color: #4caf50;
+  height: 100%;
+  text-align: center;
+  color: white;
+  line-height: 24px;
+  font-weight: bold;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #222;
+  color: #aaa;
+  margin-top: 40px;
+}
+

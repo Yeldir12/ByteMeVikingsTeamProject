@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Character Page</title>
+  <title>Character Customization</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
   <!-- Navigation -->
-  <nav id="main-nav" class="navbar">
-    <a href="index.html" class="nav-link">Home</a>
-    <a href="quests.html" class="nav-link">Quests</a>
-    <a href="character.html" class="nav-link active">Character</a>
-    <a href="request.html" class="nav-link">Request</a>
-    <a href="chat.html" class="nav-link">Chat</a>
+  <nav class="navbar">
+    <a href="index.html">Home</a>
+    <a href="quests.html">Quests</a>
+    <a href="character.html" class="active">Character</a>
+    <a href="request.html">Request</a>
+    <a href="chat.html">Chat</a>
   </nav>
 
   <!-- Main Character Section -->
-  <main id="character-page">
-    <h1 id="character-title">Your Character</h1>
+  <main class="character-page">
+    <h1>Your Character</h1>
 
     <!-- Profile Card -->
-    <section id="profile-card" class="character-profile">
+    <section class="profile-card">
       <img src="images/avatar.png" alt="Character Avatar" id="avatar" class="avatar" />
       <h2 id="player-name">Player Name</h2>
       <p>Level: <span id="player-level">5</span></p>
@@ -31,71 +31,88 @@
     </section>
 
     <!-- Customization Options -->
-    <section id="customization" class="character-customization">
+    <section class="customization">
       <h2>Customize Your Character</h2>
 
       <!-- Name Change -->
-      <div id="name-change" class="custom-option">
+      <div class="custom-option">
         <label for="name-input">Update Name:</label>
         <input type="text" id="name-input" placeholder="Enter new name" />
         <button id="save-name-btn">Save Name</button>
       </div>
 
       <!-- Gender Selection -->
-      <div id="gender-selection" class="custom-option">
+      <div class="custom-option">
         <h3>Choose Gender</h3>
-        <button class="gender-btn" id="male-btn">Male</button>
-        <button class="gender-btn" id="female-btn">Female</button>
+        <button class="gender-btn">Male</button>
+        <button class="gender-btn">Female</button>
       </div>
 
       <!-- Class Selection -->
-      <div id="class-selection" class="custom-option">
+      <div class="custom-option">
         <h3>Choose Class</h3>
-        <button class="class-btn" id="wizard-btn">Wizard</button>
-        <button class="class-btn" id="knight-btn">Knight</button>
-        <button class="class-btn" id="ranger-btn">Ranger</button>
+        <button class="class-btn">Wizard</button>
+        <button class="class-btn">Knight</button>
+        <button class="class-btn">Ranger</button>
       </div>
 
-      <!-- Outfit / Armor -->
-      <div id="armor-selection" class="custom-option">
-        <h3>Outfits & Armor</h3>
-        <button class="armor-btn" id="basic-armor-btn">Basic Armor</button>
-        <button class="armor-btn" id="elite-armor-btn">Elite Armor</button>
-        <button class="armor-btn" id="legendary-robes-btn">Legendary Robes</button>
-      </div>
-
-      <!-- Weapons / Shields -->
-      <div id="weapon-selection" class="custom-option">
-        <h3>Weapons & Shields</h3>
-        <button class="weapon-btn" id="sword-btn">Sword</button>
-        <button class="weapon-btn" id="bow-btn">Bow</button>
-        <button class="weapon-btn" id="shield-btn">Shield</button>
+      <!-- Outfit Selection -->
+      <div class="custom-option">
+        <h3>Choose Outfit</h3>
+        <div class="outfit-gallery">
+          <img src="images/characters/knight_male.png" alt="Knight Male" class="outfit-option" />
+          <img src="images/characters/mage_female_blue.png" alt="Mage Female Blue" class="outfit-option" />
+          <img src="images/characters/ranger_female_shadow.png" alt="Ranger Female Shadow" class="outfit-option" />
+          <img src="images/characters/female_nightcloak.png" alt="Female Nightcloak" class="outfit-option" />
+          <img src="images/characters/male_phantom.png" alt="Male Phantom" class="outfit-option" />
+        </div>
       </div>
     </section>
 
-    <!-- Progress / Achievements -->
-    <section id="progress" class="character-progress">
+    <!-- Progress -->
+    <section class="progress">
       <h2>Progress</h2>
-      <ul id="progress-list">
+      <ul>
         <li>Earned 20 points for helping on Quest #12</li>
         <li>Rated 5 stars by Quest Seeker</li>
         <li>Unlocked privilege: Access to Elite Board</li>
       </ul>
     </section>
 
-    <!-- Visual Status Bar -->
-    <section id="status-bar" class="status-bar">
+    <!-- Experience Bar -->
+    <section class="status-bar">
       <h2>Experience</h2>
       <div class="progress-container">
-        <div id="xp-bar" class="progress-bar" style="width: 60%;">60%</div>
+        <div class="progress-bar" style="width: 60%;">60%</div>
       </div>
     </section>
   </main>
 
   <!-- Footer -->
-  <footer id="main-footer">
+  <footer>
     &copy; 2025 ByteMeVikings Project. All rights reserved.
   </footer>
+
+  <!-- JavaScript -->
+  <script>
+    const avatar = document.getElementById("avatar");
+    const outfitOptions = document.querySelectorAll(".outfit-option");
+    const nameInput = document.getElementById("name-input");
+    const saveNameBtn = document.getElementById("save-name-btn");
+    const playerName = document.getElementById("player-name");
+
+    outfitOptions.forEach(option => {
+      option.addEventListener("click", () => {
+        avatar.src = option.src;
+      });
+    });
+
+    saveNameBtn.addEventListener("click", () => {
+      if (nameInput.value.trim()) {
+        playerName.textContent = nameInput.value.trim();
+      }
+    });
+  </script>
 
 </body>
 </html>
