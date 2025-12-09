@@ -4,6 +4,8 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const router = express.Router();
 
+const database = require("../database");
+
 //Important registration methods
 function redirectIfLoggedIn(req, res, next) {
     if (req.session.user) {
@@ -16,13 +18,31 @@ async function addAccount(username, password) {
     try {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds); //Hash the password
-        console.log("Adding account:", username, hashedPassword);
+        console.log("Adding account to database...");
+        const result = await database.accountsCollection.insertOne({
+            username: username,
+            password: hashedPassword
+        });
         return true;
     } catch (err) {
         console.log("ERROR ADDING ACCOUNT:", err);
         return false;
     }
 }
+
+async function isUsernameTaken(username) {
+    try {
+        // Search for a document with this username
+        const existing = await database.accountsCollection.findOne({ username: username });
+        console.log("Existing username ",existing,existing !== null)
+        // If a document is found, username is taken
+        return existing !== null;
+    } catch (err) {
+        console.error("ERROR checking username:", err);
+        return true; // safer to assume taken if DB fails
+    }
+}
+
 
 async function passwordMatch(password, bcryptHash) {
     return await bcrypt.compare(password, bcryptHash);
@@ -39,12 +59,28 @@ router.post("/register", async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-        return res.json({ error: "Missing username or password" });
+        return res.status(400).json({ error: "Missing username or password" });
     }
 
-    // if (users.some(u => u.username === username)) {
-    //     return res.status(400).json({ error: "Username already exists" });
-    // }
+    if(username.length < 3){
+        return res.status(400).json({ error: "Username must be at least 3 characters" });
+    }
+
+    if(password.length < 8){
+        return res.status(400).json({ error: "Password must be at least 8 characters" });
+    }
+
+    if(password.length > 20){
+        return res.status(400).json({ error: "Password must be less than 20 characters" });
+    }
+
+    if(username.length > 20){
+        return res.status(400).json({ error: "Username must be less than 20 characters" });
+    }
+
+    if (await isUsernameTaken(username)) {
+        return res.status(400).json({ error: "Username \""+username+"\" already exists" });
+    }
 
     if (await addAccount(username, password)) {
         // res.redirect("/login");
