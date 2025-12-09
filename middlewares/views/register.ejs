@@ -4,25 +4,59 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
-    <link rel="stylesheet" href="/register.css" />
     <%- include('partials/head-tags') %>
   </head>
   <body>
     <%- include('partials/header') %>
-    <main>
+    <main class="py-5">
       <div class="container">
-        <h1>Register</h1>
-        <form id="registerForm">
-          <input type="text" name="username" placeholder="Username" required />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-          />
-          <button type="submit">Register</button>
-        </form>
-        <div id="message" class="message"></div>
+        <div class="row justify-content-center">
+          <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h1 class="card-title mb-4 text-center">Register</h1>
+
+                <form id="registerForm">
+                  <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input
+                      type="text"
+                      id="username"
+                      name="username"
+                      class="form-control"
+                      placeholder="Username"
+                      required
+                    />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      class="form-control"
+                      placeholder="Password"
+                      required
+                    />
+                  </div>
+
+                  <div class="d-grid mb-3">
+                    <button type="submit" class="btn btn-success btn-lg">
+                      Register
+                    </button>
+                  </div>
+                </form>
+
+                <div id="message" class="mt-2"></div>
+
+                <p class="text-center mt-3">
+                  Already have an account? <a href="/login">Login</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 
@@ -62,7 +96,6 @@
                 console.log("Redirecting...");
                 window.location.href = "/login";
               }, 1000); // waits 1 second
-
             } else {
               messageEl.textContent = data.error;
               messageEl.className = "message error";

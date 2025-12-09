@@ -10,22 +10,22 @@ header #logo {
   margin-right: 40px;
 }
 
-header button{
-  background-color: rgba(0,0,0,0);
+header button {
+  background-color: rgba(0, 0, 0, 0);
   border-radius: 0;
   border: none;
-  font-size: .9em;
-  padding:10px;
+  font-size: 0.8em;
+  padding: 10px 0;
   color: white;
-  border-bottom: 2px solid rgba(0,0,0,0);
+  border-bottom: 2px solid rgba(0, 0, 0, 0);
 }
 
-header button:hover{
+header button:hover {
   border-radius: 0;
   border: none;
   color: white;
-  background-color: rgba(0,0,0,0);
-  border-bottom: 2px solid white
+  background-color: rgba(0, 0, 0, 0);
+  border-bottom: 2px solid white;
 }
 
 nav {
@@ -104,4 +104,22 @@ footer {
 
 .small-btn {
   font-size: 0.9rem;
+}
+
+.message {
+  text-align: center;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  display: none;
+}
+.message.success {
+  background-color: #d4edda;
+  color: #155724;
+  display: block;
+}
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  display: block;
 }

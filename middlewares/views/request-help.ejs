@@ -8,10 +8,43 @@
 </head>
 <body>
   <%- include('partials/header') %>
-  <main>
-    <h1>Request Help</h1>
-    <p>Help friends and gain points to upgrade your character!!!!</p>
+  <main class="py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h1 class="card-title mb-4 text-center">Request Help</h1>
+              
+              <form id="requestHelpForm">
+                <div class="mb-3">
+                  <label for="summary" class="form-label">Summary</label>
+                  <input type="text" id="summary" class="form-control" placeholder="School/Life/Work Etc" required />
+                </div>
+
+                <div class="mb-3">
+                  <label for="description" class="form-label">Description</label>
+                  <input type="text" id="description" class="form-control" placeholder="I really need help with this" required />
+                </div>
+
+                <div class="mb-4">
+                  <label for="style" class="form-label">Choose a style for your request</label>
+                  <input type="color" id="style" class="form-control form-control-color" value="#563d7c" title="Choose your color" required />
+                </div>
+
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                </div>
+              </form>
+
+              <div id="message" class="mt-3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
+
   <%- include('partials/footer') %>
 </body>
 </html>
