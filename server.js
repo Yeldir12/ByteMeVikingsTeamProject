@@ -40,55 +40,44 @@ app.use("/character", character);
 const authRoutes = require("./routes/auth");
 app.use("/", authRoutes);
 
-// Registration setup
-const usersFilePath = path.join(__dirname, "users.json");
 
-function readUsers() {
+//Database
+const database = require("./database");
+
+//Add endpoint for adding items to the database
+app.post('/api/items', async (req, res) => {
   try {
-    const data = fs.readFileSync(usersFilePath, "utf8").trim();
-    if (!data) {
-      return [];
-    }
-    return JSON.parse(data);
+    console.log("Posting");
+    const newItem = req.body;
+
+    //This is where the magic happens
+    const result = await database.accountsCollection.insertOne(newItem);
+
+    res.status(201).json({
+      message: "Item added!",
+      id: result.insertedId
+    });
   } catch (err) {
-    console.error("Error reading users.json:", err);
-    return [];
+    // Log the full error to the console
+    console.error("MongoDB Insert Error:", err);
+
+    // Send a detailed response
+    res.status(500).json({
+      message: "Something exploded 💥",
+      errorName: err.name,
+      errorMessage: err.message,
+      stack: err.stack
+    });
   }
-}
-
-function writeUsers(users) {
-  fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
-}
-
-// Register route
-app.post("/register", async (req, res) => {
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res.status(400).json({ error: "Username and password are required" });
-  }
-
-  // Create users.json if it doesn't exist
-  if (!fs.existsSync(usersFilePath)) {
-    fs.writeFileSync(usersFilePath, "[]");
-  }
-
-  const users = readUsers();
-
-  if (users.some(u => u.username === username)) {
-    return res.status(400).json({ error: "Username already exists" });
-  }
-
-  // Hash the password with bcrypt
-  const hashedPassword = await bcrypt.hash(password, 10);
-  
-  users.push({ username, hashedPassword });
-  writeUsers(users);
-
-  res.json({ message: "Registration successful!" });
 });
 
-// Error Handling (MUST BE LAST)
+//-------------------------------------
+//Users endpoint
+users = require("./users");
+app.post("/register", async (req, res) => users.register(req, res));
+
+//-------------------------------------
+// Error endpoints (MUST BE LAST)
 app.use((req, res) => {
   res.status(404).render("404");
 });
@@ -98,12 +87,12 @@ app.use((err, req, res, next) => {
   res.status(500).render("500");
 });
 
-//Database
-const database = require("./database");
-database.connect();
-
-// Start server
+//-------------------------------------
+// Start server and database connection
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+async function start() {
+  await database.connect();
+  app.listen(port, () => console.log(`Server running http://localhost:${port}`));
+}
+
+start();

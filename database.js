@@ -6,7 +6,8 @@ dotenv.config();
  
 const userName = process.env.MONGODB_USERNAME;
 const password = process.env.MONGODB_PASSWORD;
- 
+
+
 const uri = `mongodb+srv://${userName}:${password}@questdatabase.pqhnow6.mongodb.net/?appName=QuestDatabase`;
  
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -18,14 +19,7 @@ const client = new MongoClient(uri, {
   },
 });
  
-// Connect to the database and set up the collection
-const db = client.db("board-data");
-const collectionName = db.collection("accounts");
- 
-// Export client, db, and collectionName for use in other files
-module.exports = { client, db, collectionName };
- 
-async function run() {
+async function connect() {
   try {
     console.log("CONNECTING...");
     await client.connect();
@@ -34,5 +28,11 @@ async function run() {
     console.error("Error connecting to MongoDB:",err);
   }
 }
+
+// Connect to the database and set up the collection
+const db = client.db("board-data");
+const accountsCollection = db.collection("accounts");
  
-run().catch(console.dir);
+// Export client, db, and collectionName for use in other files
+module.exports = { client, db, accountsCollection, connect };
+ 
