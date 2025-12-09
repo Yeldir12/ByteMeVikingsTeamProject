@@ -1,7 +1,15 @@
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* ensures body is at least full viewport height */
+}
+
+html,
+body {
+  height: 100%; /* full viewport height */
+  margin: 0;
 }
 
 header #logo {
@@ -17,7 +25,6 @@ header #logo:hover {
   text-decoration: none;
   margin-right: 20px;
 }
-
 
 header button {
   background-color: rgba(0, 0, 0, 0);
@@ -54,15 +61,19 @@ nav a:hover {
 
 main {
   padding: 2em;
+  flex: 1 0 auto; /* main content grows to fill remaining space */
 }
 
 footer {
   background-color: #f1f1f1;
   text-align: center;
   padding: 1em;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+}
+footer {
+  flex-shrink: 0; /* never shrinks; stays at bottom if content is short */
+  padding: 1rem;
+  background-color: #f8f9fa;
+  text-align: center;
 }
 
 /* Header container */
