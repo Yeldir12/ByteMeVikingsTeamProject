@@ -13,7 +13,18 @@
   </div>
 
   <div class="right-nav">
-    <a href="/login" class="btn small-btn"><i class="fa-regular fa-user"></i></a>
+    <a href="/login" class="btn small-btn"><i class="fa-regular fa-user"></i>
+    
+      <% if (user) { %>
+      <span><%= user %></span>
+      <% } else { %>
+      <span>Login</span>
+      <% } %>
+    
+    </a>
+    <% if (user) { %>
+      <a href="/logout" class="btn small-btn">Logout</span></a>
+    <% } %>
   </div>
 </header>
 </div>

@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Quest Board</title>
-  <%- include('partials/head-tags') %> 
-</head>
-<body>
-  <%- include('partials/header') %> 
+  <head>
+    <meta charset="UTF-8" />
+    <title>Quest Board</title>
+    <%- include('partials/head-tags') %>
+  </head>
+  <body>
+    <%- include('partials/header') %>
 
-  <main class="home-main">
-    <h1>Welcome to My Website</h1>
-    <p>Help friends and gain points to upgrade your character!!!!</p>
-  </main>
+    <main class="home-main">
+      <h1>Welcome to My Website</h1>
+      <% if (user) { %>
+      <p>Howdy, <%= user %>! 😎</p>
+      <% } else { %>
+      <p>You are NOT logged in. 👀</p>
+      <% } %>
+      <p>Help friends and gain points to upgrade your character!!!!</p>
+    </main>
 
-  <%- include('partials/footer') %>
-</body>
+    <%- include('partials/footer') %>
+  </body>
 </html>

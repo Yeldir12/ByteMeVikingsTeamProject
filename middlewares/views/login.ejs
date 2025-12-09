@@ -35,25 +35,26 @@
           const messageEl = document.getElementById("message");
 
           try {
-            const res = await fetch("http://localhost:3000/login", {
+            const response = await fetch("http://localhost:3000/login", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ username, password }),
             });
 
-            const data = await res.json();
+            const data = await response.json();
 
-            if (data.token) {
-              localStorage.setItem("token", data.token);
-              messageEl.textContent = "Logged in successfully!";
+            if (response.ok) {
+              messageEl.textContent = data.message;
               messageEl.className = "message success";
               document.getElementById("loginForm").reset();
-              // Redirect after 1 second
+              
+              //Redirect to homepage
               setTimeout(() => {
+                console.log("Redirecting...");
                 window.location.href = "/";
-              }, 1000);
+              }, 1000); // waits 1 second
             } else {
-              messageEl.textContent = data.error || "Error logging in";
+              messageEl.textContent = data.error;
               messageEl.className = "message error";
             }
           } catch (error) {
