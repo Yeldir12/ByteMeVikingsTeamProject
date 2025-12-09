@@ -57,6 +57,12 @@
               messageEl.textContent = data.message;
               messageEl.className = "message success";
               document.getElementById("registerForm").reset();
+
+              setTimeout(() => {
+                console.log("Redirecting...");
+                window.location.href = "/login";
+              }, 1000); // waits 1 second
+
             } else {
               messageEl.textContent = data.error;
               messageEl.className = "message error";

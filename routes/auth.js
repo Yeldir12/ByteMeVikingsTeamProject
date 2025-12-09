@@ -91,8 +91,7 @@ router.post("/register", async (req, res) => {
     }
 
     if (await addAccount(username, password)) {
-        // res.redirect("/login");
-        return res.json({ message: "Account added" });
+        return res.json({ message: "Welcome \"" + username + "\"!" });
     } else {
         return res.json({ error: "Error Adding account" });
     }
@@ -124,8 +123,7 @@ router.post("/login", async (req, res) => {
     }
 
     console.log("Logged in");
-    // res.redirect("/");
-    req.session.user = username;
+     req.session.user = username;
     return res.status(200).json({ message: "Signed in." });
 
 });

@@ -4,6 +4,10 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 const path = require("path");
 const fs = require("fs");
+const dotenv = require("dotenv");
+ 
+// Load environment variables from .env file
+dotenv.config();
 
 const app = express();
 
@@ -17,7 +21,7 @@ app.use(express.json());
 // Sessions (only once!)
 app.use(
   session({
-    secret: "supersecretkey",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 1000 * 60 * 60 }, // 1 hour
