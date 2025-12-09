@@ -123,7 +123,7 @@ router.post("/login", async (req, res) => {
     }
 
     console.log("Logged in");
-     req.session.user = username;
+    req.session.user = username;
     return res.status(200).json({ message: "Signed in." });
 
 });

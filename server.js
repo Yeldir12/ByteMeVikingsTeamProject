@@ -35,9 +35,6 @@ app.use("/", homeRoute);
 const questBoard = require("./routes/quest-board");
 app.use("/quest-board", questBoard);
 
-const questChat = require("./routes/quest-chat");
-app.use("/quest-chat", questChat);
-
 const requestHelp = require("./routes/request-help");
 app.use("/request-help", requestHelp);
 

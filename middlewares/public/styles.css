@@ -44,6 +44,45 @@ header button:hover {
   border-bottom: 2px solid white;
 }
 
+ #notSignedInBulletin {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  .bulletin-box {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    width: min(90%, 400px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  }
+
+  .bulletin-box h1 {
+    margin-bottom: 10px;
+  }
+
+  .login-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 15px;
+    background: #0d6efd;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+  }
+
+  .login-btn:hover {
+    background: #0b5ed7;
+  }
+
 nav {
   background-color: #333;
   padding: 1em;

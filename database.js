@@ -32,7 +32,9 @@ async function connect() {
 // Connect to the database and set up the collection
 const db = client.db("board-data");
 const accountsCollection = db.collection("accounts");
+const questsCollection = db.collection("quests");
+const messageCollection = db.collection("messages");
  
 // Export client, db, and collectionName for use in other files
-module.exports = { client, db, accountsCollection, connect };
+module.exports = { client, db, accountsCollection, questsCollection, messageCollection, connect };
  
