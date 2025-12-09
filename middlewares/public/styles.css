@@ -108,15 +108,10 @@ main {
 }
 
 footer {
-  background-color: #f1f1f1;
+  background-color: #e2e2e2;
   text-align: center;
   padding: 1em;
-}
-footer {
   flex-shrink: 0; /* never shrinks; stays at bottom if content is short */
-  padding: 1rem;
-  background-color: #f8f9fa;
-  text-align: center;
 }
 
 /* Header container */

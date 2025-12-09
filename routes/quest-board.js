@@ -7,30 +7,32 @@ const { WebSocketServer } = require("ws");
 
 
 //Websockets
-const wssQuestsAddress = "/ws/chat";
+const wssQuestsAddress = "/ws/quest-board";
 const wssQuests = new WebSocketServer({ noServer: true });
 wssQuests.on("connection", (ws, request) => {
   const session = request.session;
-  
   if (!request.session.user) {
     console.log("QUESTS---WebSocket connection rejected (unauthenticated)");
     return;
   }
 
-  ws.send("QUESTS---Connected to chat WS!");
+  ws.send(JSON.stringify({
+    type: "INFO",
+    message: "Connected to chat WS!"
+  }));
 
-  ws.on("message", async (message) => {
-    console.log("QUESTS---Received message:", message.toString());
+  ws.on("message", async (msg) => {
+    const data = JSON.parse(msg);
 
-    if (message.toString().startsWith("ACCEPT---")) {
-      var questID = message.toString().substring("ACCEPT---".length);
-      var count = await questUtils.acceptQuest(questID, session.user);
-      console.log("QUESTS---Accepted quest:", questID, count);
-    }
-    else if (message.toString().startsWith("REJECT---")) {
-      var questID = message.toString().substring("REJECT---".length);
-      var count = await questUtils.rejectQuest(questID, session.user);
-      console.log("QUESTS---Rejected quest:", questID, count);
+    if (data.action === "GET_QUESTS") {
+      const quests = await questUtils.getUnacceptedQuests(session.user);
+      ws.send(JSON.stringify({ type: "QUESTS_LIST", quests }));
+    } else if (data.action === "ACCEPT") {
+      var out = await questUtils.acceptQuest(data.questID, session.user);
+      // console.log("quest accepted: " + out);
+    } else if (data.action === "REJECT") {
+      var out = await questUtils.rejectQuest(data.questID, session.user);
+      // console.log("quest rejected: " + out);
     }
   });
 
@@ -39,22 +41,15 @@ wssQuests.on("connection", (ws, request) => {
   });
 });
 
-// async function sendQuestsWSS(){
-//   const quests = await questUtils.getUnacceptedQuests(req.session.user);
-//   wssQuests.clients.forEach((client) => {
-//     client.send("QUESTS---" + JSON.stringify(quests));
-//   });
-// }
-
 router.wssQuests = wssQuests;
 router.wssQuestsAddress = wssQuestsAddress;
 
 //Routes
 router.get('/chat', async (req, res) => {
-  var acceptedQuests = await questUtils.getAcceptedQuests(req.session.user);
+  // var acceptedQuests = await questUtils.getAcceptedQuests(req.session.user);
 
   routeUtils.renderPage(req, res, 'quest-chat', {
-    acceptedQuests: acceptedQuests,
+    // acceptedQuests: acceptedQuests,
     title: "Quest Chat",
     otherPageTitle: "Quest Board",
     otherPageLink: "/quest-board"
@@ -62,25 +57,10 @@ router.get('/chat', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-  if (req.session.user != null) {
-    const quests = await questUtils.getUnacceptedQuests(req.session.user);
-    // const acceptedQuests = await questUtils.getAcceptedQuests(req.session.user);
-    routeUtils.renderPage(req, res, 'quest-board', {
-      title: "Quest Board",
-      otherPageTitle: "Quest Chat",
-      otherPageLink: "/quest-board/chat",
-      quests: quests,
-      // acceptedQuests:acceptedQuests
-    });
-  }
-  else {
-    routeUtils.renderPage(req, res, 'quest-board', {
-      title: "Quest Board",
-      otherPageTitle: "Quest Chat",
-      otherPageLink: "/quest-board/chat",
-      quests: [],
-      // acceptedQuests: []
-    });
-  }
+  routeUtils.renderPage(req, res, 'quest-board', {
+    title: "Quest Board",
+    otherPageTitle: "Quest Chat",
+    otherPageLink: "/quest-board/chat"
+  });
 });
 module.exports = router;
