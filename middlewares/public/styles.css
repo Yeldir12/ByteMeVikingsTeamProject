@@ -7,8 +7,17 @@ body {
 header #logo {
   color: rgb(0, 204, 255);
   font-weight: 700;
-  margin-right: 40px;
+  margin-right: 20px;
 }
+
+header #logo:hover {
+  /* color: white; */
+  /* text-shadow: 0 0 15px #fff; */
+  font-weight: 700;
+  text-decoration: none;
+  margin-right: 20px;
+}
+
 
 header button {
   background-color: rgba(0, 0, 0, 0);
