@@ -31,22 +31,46 @@
           <% } %>
 
           <p class="mb-1">
-            Level: <span id="player-level" class="badge bg-primary">5</span>
-          </p>
-          <p class="mb-1">
             Points: <span id="player-points" class="badge bg-success">120</span>
           </p>
           <p>
-            Status:
+            Level:
             <span id="player-status" class="badge bg-warning text-dark"
-              >🛡️ Knight Helper</span
+              >3 🛡️ Knight Helper</span
             >
           </p>
         </div>
       </section>
 
-      <form action="/character" method="POST" id="character-form">
-        <section id="customization" class="mb-5">
+           <!-- Progress / Achievements -->
+      <section id="progress" class="mb-5">
+        <h2 class="mb-3">Progress & Achievements</h2>
+        <ul class="list-group">
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            Earned 20 points for helping on Quest #12
+            <span class="badge bg-primary rounded-pill">+20</span>
+          </li>
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            Rated 5 stars by Quest Seeker
+            <span class="badge bg-warning text-dark rounded-pill"
+              >⭐️⭐️⭐️⭐️⭐️</span
+            >
+          </li>
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            Unlocked privilege: Access to Elite Board
+            <span class="badge bg-success rounded-pill">NEW</span>
+          </li>
+        </ul>
+      </section>
+
+      <form action="/character" method="POST" id="character-form" class="mb-5">
+        <section id="customization" >
           <h2 class="mb-3">Customize Your Character</h2>
 
           <!-- Hidden fields to store actual submitted values -->
@@ -56,19 +80,19 @@
           <input type="hidden" name="weapon" id="weapon-input" />
 
           <!-- Gender Selection -->
-          <div id="gender-selection" class="mb-4">
+          <div id="gender-selection" class="mb-3">
             <h3 class="mb-2">Choose Gender</h3>
             <div class="btn-group">
               <button
                 type="button"
-                class="btn btn-outline-primary gender-btn"
+                class="btn btn-outline-secondary gender-btn"
                 data-value="male"
               >
                 Male
               </button>
               <button
                 type="button"
-                class="btn btn-outline-danger gender-btn"
+                class="btn btn-outline-secondary gender-btn"
                 data-value="female"
               >
                 Female
@@ -77,7 +101,7 @@
           </div>
 
           <!-- Class Selection -->
-          <div id="class-selection" class="mb-4">
+          <div id="class-selection" class="mb-3">
             <h3 class="mb-2">Choose Class</h3>
             <div class="btn-group">
               <button
@@ -105,7 +129,7 @@
           </div>
 
           <!-- Armor Selection -->
-          <div id="armor-selection" class="mb-4">
+          <div id="armor-selection" class="mb-4" style="display: none;">
             <h3 class="mb-2">Outfits & Armor</h3>
             <div class="btn-group flex-wrap">
               <button
@@ -133,7 +157,7 @@
           </div>
 
           <!-- Weapons / Shields -->
-          <div id="weapon-selection" class="mb-4">
+          <div id="weapon-selection" class="mb-4" style="display: none;">
             <h3 class="mb-2">Weapons & Shields</h3>
             <div class="btn-group flex-wrap">
               <button
@@ -167,32 +191,7 @@
         </section>
       </form>
 
-      <!-- Progress / Achievements -->
-      <section id="progress" class="mb-5">
-        <h2 class="mb-3">Progress & Achievements</h2>
-        <ul class="list-group">
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-          >
-            Earned 20 points for helping on Quest #12
-            <span class="badge bg-primary rounded-pill">+20</span>
-          </li>
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-          >
-            Rated 5 stars by Quest Seeker
-            <span class="badge bg-warning text-dark rounded-pill"
-              >⭐️⭐️⭐️⭐️⭐️</span
-            >
-          </li>
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-          >
-            Unlocked privilege: Access to Elite Board
-            <span class="badge bg-success rounded-pill">NEW</span>
-          </li>
-        </ul>
-      </section>
+ 
 
       <!-- Visual Status Bar
       <section id="status-bar" class="mb-5">

@@ -156,6 +156,26 @@ footer {
   white-space: nowrap; /* Prevent wrapping */
 }
 
+#character-form{
+      padding: 20px;
+    border: 1px solid gray;
+    border-radius: 10px;
+}
+
+.card-body{
+  font-size: 1.2em;
+}
+
+#character-form .btn-outline-secondary{
+ background:rgb(160, 160, 160);
+ border: 1px solid rgb(54, 54, 54);
+}
+
+#character-form .active{
+ background: #3b5bdb;
+ border: 1px solid #3b5bdb;
+}
+
 .btn:hover {
   background: #3b5bdb;
 }
@@ -181,3 +201,4 @@ footer {
   color: #721c24;
   display: block;
 }
+

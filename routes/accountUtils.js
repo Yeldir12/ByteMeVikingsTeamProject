@@ -7,6 +7,9 @@ function character_json(gender = "male", charClass = "wizard", armor = "basic-ar
         class: charClass,//wizard, knight, ranger
         armor, //basic-armor, elite-armor, legendary-robes
         weapon, //sword, bow, shield
+        //Extra stuff
+        points: 0,
+        level: 1
     };
 }
 

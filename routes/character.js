@@ -19,7 +19,6 @@ router.post('/', async (req, res) => {
   const { gender, class: charClass, armor, weapon } = req.body;
   ;
 
-
   var newCharacter = await accountUtils.setCharacter(req.session.user,
     gender, charClass, armor, weapon);
 
