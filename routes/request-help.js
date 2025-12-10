@@ -21,6 +21,17 @@ router.post('/', (req, res) => {
       const description = req.body.description;
       const color = req.body.color;
       const timeMins = req.body.timeMins;
+
+      //Check the length of all elements to prevent unreasonable requests
+      if (title.length > 50) {
+        return res.status(400).json({ error: "Title too long" });
+      }
+
+      if (description.length > 1000) {
+        return res.status(400).json({ error: "Description too long" });
+      }
+
+
       questUtils.newQuest(username, title, description, color, timeMins);
       return res.status(200).json({ message: "Request added successfully" });
     } else {

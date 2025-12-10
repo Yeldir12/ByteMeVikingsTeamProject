@@ -52,27 +52,34 @@
 
         <!-- Chat area -->
         <div class="col-md-9 chat-messages d-flex flex-column">
-          <div
-            class="d-flex justify-content-between align-items-center border-bottom p-2"
-          >
-            <h5 class="mb-0" id="chat-title">Homework Help</h5>
-            <div>
-              <button class="btn btn-sm btn-success" id="resolveBtn">
-                Resolve Quest
-              </button>
+          <div class="align-items-center border-bottom p-2">
+            <div class="d-flex justify-content-between p-2">
+              <h5 class="mb-0" id="chat-title">Title</h5>
+
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-light btn-sm" id="descToggleBtn">
+                  Show Description <i class="fa-solid fa-caret-down"></i>
+                </button>
+
+                <button class="btn btn-sm btn-success" id="resolveBtn">
+                  Resolve Quest
+                </button>
+              </div>
             </div>
+            <p id="quest-description" style="display: none">description</p>
           </div>
 
           <div class="messages flex-grow-1 overflow-auto" id="messages"></div>
 
           <div class="chat-input mt-auto p-2">
             <form class="d-flex gap-2" id="chatForm">
-              <textarea 
+              <textarea
                 id="message"
                 rows="3"
                 placeholder="Type your message..."
               ></textarea>
-              <input style="display: none;"
+              <input
+                style="display: none"
                 type="file"
                 class="form-control form-control-sm"
                 id="fileInput"
@@ -169,6 +176,7 @@
 
     function applySelectedQuest(quest) {
       const titleEl = document.querySelector("#chat-title");
+      const descriptionEl = document.querySelector("#quest-description");
       const resolveButtonEl = document.getElementById("resolveBtn");
       const chatFormEl = document.getElementById("chatForm");
 
@@ -181,6 +189,7 @@
 
       if (!quest) {
         titleEl.textContent = "No quest selected";
+        descriptionEl.textContent = "";
         resolveButtonEl.style.display = "none";
         setFormDisabled(true);
         return;
@@ -188,6 +197,7 @@
 
       // --- Quest selected ---
       titleEl.textContent = quest.title;
+      descriptionEl.textContent = quest.description;
 
       // Highlight active quest
       document.querySelectorAll("li.list-group-item").forEach((li) => {
@@ -250,14 +260,20 @@
     }
 
     document.getElementById("resolveBtn").addEventListener("click", () => {
-      if (selectedQuest != null) {
-        ws.send(
-          JSON.stringify({
-            action: "RESOLVE_QUEST",
-            questDbId: selectedQuest._id,
-          })
-        );
-      }
+      if (!selectedQuest) return;
+
+      const yes = confirm(
+        "Are you sure?\nThis will permanently delete the quest thread."
+      );
+
+      if (!yes) return; // user bailed, good for them
+
+      ws.send(
+        JSON.stringify({
+          action: "RESOLVE_QUEST",
+          questDbId: selectedQuest._id,
+        })
+      );
     });
 
     // Auto-adjust height
@@ -282,5 +298,22 @@
     window.addEventListener("load", adjustChatHeight);
     window.addEventListener("resize", adjustChatHeight);
     setTimeout(adjustChatHeight, 200);
+
+    const desc = document.getElementById("quest-description");
+    const toggleBtn = document.getElementById("descToggleBtn");
+
+    toggleBtn.addEventListener("click", () => {
+      const isVisible = desc.style.display !== "none";
+
+      if (isVisible) {
+        desc.style.display = "none";
+        toggleBtn.innerHTML =
+          'Show Description <i class="fa-solid fa-caret-down"></i>';
+      } else {
+        desc.style.display = "block";
+        toggleBtn.innerHTML =
+          'Hide Description <i class="fa-solid fa-caret-up"></i>';
+      }
+    });
   </script>
 </html>

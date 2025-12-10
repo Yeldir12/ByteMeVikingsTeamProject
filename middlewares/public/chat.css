@@ -26,6 +26,13 @@
   padding: 0.5rem;
   background: #fff;
 }
+#descToggleBtn{
+  color: black;
+}
+#quest-description{
+  margin: 10px;
+  color:#333;
+}
 .chat-message {
   margin-bottom: 1rem;
   border-radius: 20px 20px 20px 0px;
