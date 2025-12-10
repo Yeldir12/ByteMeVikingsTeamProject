@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <%- include('partials/head-tags') %>
+  </head>
+  <body>
+    <%- include('partials/header') %>
+    <main class="py-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h1 class="card-title mb-4 text-center">Register</h1>
+
+                <form id="registerForm">
+                  <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input
+                      type="text"
+                      id="username"
+                      name="username"
+                      class="form-control"
+                      placeholder="Username"
+                      required
+                    />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      class="form-control"
+                      placeholder="Password"
+                      required
+                    />
+                  </div>
+
+                  <div class="d-grid mb-3">
+                    <button type="submit" class="btn btn-success btn-lg">
+                      Register
+                    </button>
+                  </div>
+                </form>
+
+                <div id="message" class="mt-2"></div>
+
+                <p class="text-center mt-3" style="font-size: 16px">
+                  Already have an account? <a href="/login">Login</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <%- include('partials/footer') %>
+
+    <script>
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const username = document.querySelector(
+            'input[name="username"]'
+          ).value;
+          const password = document.querySelector(
+            'input[name="password"]'
+          ).value;
+          const messageEl = document.getElementById("message");
+
+          try {
+            const response = await fetch("/register", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ username, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              messageEl.textContent = data.message;
+              messageEl.className = "message success";
+              document.getElementById("registerForm").reset();
+
+              setTimeout(() => {
+                console.log("Redirecting...");
+                window.location.href = "/login";
+              }, 1000); // waits 1 second
+            } else {
+              messageEl.textContent = data.error;
+              messageEl.className = "message error";
+            }
+          } catch (error) {
+            messageEl.textContent = "An error occurred. Please try again.";
+            messageEl.className = "message error";
+          }
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,38 @@
+.note-card {
+  /* min-width: 300px; */
+  border: 1px solid gray;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.note-card:nth-child(even):hover {
+  scale: 1.1;
+  rotate: 2deg;
+}
+
+
+.note-card:nth-child(odd):hover {
+  scale: 1.1;
+  rotate: -2deg;
+}
+
+.note-card small {
+  color: inherit;
+  opacity: 0.6;
+}
+
+.note-card button {
+  background-color: gray;
+  border: 1px solid rgb(68, 68, 68);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.accept-btn {
+  float: right;
+}
+
+.delete-btn {
+  float: right;
+}

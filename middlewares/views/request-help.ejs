@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= otherPageTitle %></title>
+    <%- include('partials/head-tags') %>
+  </head>
+  <body>
+    <%- include('partials/header') %> <%- include('partials/not-signed-in') %>
+
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" ><%= title %></a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="<%= otherPageLink %>">
+          <%= otherPageTitle %>
+        </a>
+      </li>
+    </ul>
+
+    <main class="py-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h1 class="card-title mb-4 text-center">Request Help</h1>
+
+                <form id="requestHelpForm">
+                  <div class="mb-3">
+                    <label for="summary" class="form-label">Summary</label>
+                    <input
+                      type="text"
+                      id="req-title"
+                      class="form-control"
+                      placeholder="School/Life/Work Etc"
+                      required
+                    />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="description" class="form-label"
+                      >Description</label
+                    >
+                    <input
+                      type="text"
+                      id="req-description"
+                      class="form-control"
+                      placeholder="I really need help with this"
+                      required
+                    />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="description" class="form-label"
+                      >How long is this going to take? (In minutes)</label
+                    >
+                    <input
+                      type="number"
+                      id="req-timeMins"
+                      class="form-control"
+                      placeholder="10"
+                      required
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label for="style" class="form-label"
+                      >Choose a style for your request</label
+                    >
+                    <input
+                      type="color"
+                      id="req-color"
+                      class="form-control form-control-color"
+                      value="#563d7c"
+                      title="Choose your color"
+                      required
+                    />
+                  </div>
+
+                  <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+
+                <div id="message" class="mt-3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <%- include('partials/footer') %>
+
+    <script>
+      document
+        .getElementById("requestHelpForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const title = document.getElementById("req-title").value;
+          const description = document.getElementById("req-description").value;
+          const color = document.getElementById("req-color").value;
+          const timeMins = document.getElementById("req-timeMins").value;
+
+          const messageEl = document.getElementById("message");
+          try {
+            const response = await fetch(`${location.origin}/request-help`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ title, description, color, timeMins }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              messageEl.textContent = data.message;
+              messageEl.className = "message success";
+              document.getElementById("requestHelpForm").reset();
+
+              //Redirect to homepage
+              setTimeout(() => {
+                console.log("Redirecting...");
+                window.location.href = "request-help/chat";
+              }, 1000); // waits 1 second
+            } else {
+              messageEl.textContent = data.error;
+              messageEl.className = "message error";
+            }
+          } catch (error) {
+            messageEl.textContent = "An error occurred. Please try again.";
+            messageEl.className = "message error";
+            console.error("Error:", error);
+          }
+        });
+    </script>
+  </body>
+        <%- include('partials/chat-ws', { 
+          requestHelpWs: '/ws/request-help/chat', 
+          questBoardWs: '/ws/quest-board/chat' 
+    }) %>
+</html>

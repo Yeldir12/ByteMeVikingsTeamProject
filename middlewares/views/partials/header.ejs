@@ -1,0 +1,45 @@
+<div id="header-container">
+<header class="site-header" id="header">
+  <div class="left-nav">
+    <a href="/"><span id="logo"><i class="fa-solid fa-note-sticky"></i>Bravequests</span></a>
+
+    <a href="/quest-board" id="link-quest-board"><button>Quest Board</button></a>
+    <a href="/character" id="link-character"><button>Character</button></a>
+    <a href="/request-help/chat" id="link-request-help"><button>Requested Help</button></a>
+  </div>
+
+  <div class="right-nav">
+    <a href="/login" class="btn small-btn"><i class="fa-regular fa-user"></i>
+    
+      <% if (typeof user !== "undefined" && user) { %>
+      <span><%= user %></span>
+      <% } else { %>
+      <span>Login</span>
+      <% } %>
+    
+    </a>
+    <% if (typeof user !== "undefined" && user) { %>
+      <a href="/logout" class="btn small-btn">Logout</span></a>
+    <% } %>
+  </div>
+</header>
+</div>
+
+
+<div id="header-padding"></div>
+<script>
+  document.getElementById("header-padding").style.marginBottom
+   = document.getElementById("header").offsetHeight + 10 + "px";
+
+  const path = window.location.pathname;
+
+if (path.startsWith('/request-help')) {
+    document.getElementById('link-request-help').classList.add('active');
+}
+if (path.startsWith('/quest-board')) {
+    document.getElementById('link-quest-board').classList.add('active');
+}
+if (path.startsWith('/character')) {
+    document.getElementById('link-character').classList.add('active');
+}
+</script>

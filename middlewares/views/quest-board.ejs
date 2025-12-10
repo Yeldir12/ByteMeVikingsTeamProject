@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <%- include('partials/head-tags') %>
+    <link rel="stylesheet" href="/quest-board.css" />
+    <script src="/color.js"></script>
+  </head>
+  <body class="bg-light">
+    <%- include('partials/header') %> <%- include('partials/not-signed-in') %>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active"><%= title %></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<%= otherPageLink %>">
+          <%= otherPageTitle %>
+        </a>
+      </li>
+    </ul>
+    <br />
+
+    <main>
+      <div id="questGrid" class="row g-3">
+        <!-- Quests will be rendered here dynamically -->
+      </div>
+    </main>
+    <%- include('partials/footer') %>
+  </body>
+  <script>
+    const protocol = location.protocol === "https:" ? "wss" : "ws";
+    const ws = new WebSocket(`${protocol}://${location.host}/ws/quest-board`);
+
+    function requestBoardUpdate() {
+      ws.send(JSON.stringify({ action: "GET_QUESTS" }));
+    }
+
+    ws.addEventListener("open", () => {
+      console.log("WebSocket connection opened");
+      requestBoardUpdate();
+    });
+
+    ws.addEventListener("close", () =>
+      console.log("WebSocket connection closed")
+    );
+
+    ws.addEventListener("message", (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.type === "QUESTS_LIST") {
+        console.log("Updating quests...");
+        renderQuests(data.quests);
+      } else if (data.type === "INFO") {
+        console.log("WSS: " + data.message);
+      } else if (data.type === "UPDATE") {
+        console.log("Update:", data);
+      }
+    });
+
+    // Render quests dynamically
+    function renderQuests(quests) {
+      const questGrid = document.getElementById("questGrid");
+      questGrid.innerHTML = ""; // Clear existing
+
+      if (quests.length === 0) {
+        questGrid.innerHTML = `
+<h1 class="text-center text-muted" style="opacity: 0.2;">No quests available</h1>
+
+  `;
+      }
+
+      quests.forEach((quest) => {
+        const col = document.createElement("div");
+        col.className = "col-12 col-sm-6 col-md-4 col-lg-3";
+        col.dataset.id = quest._id;
+
+        var bgColor = muteIfUgly(quest.color);
+        var fgColor = "#333";
+        if (isColorDark(bgColor)) {
+          fgColor = "white";
+        }
+
+        col.innerHTML = `
+  <div class="card note-card" style="background-color: ${bgColor}; color: ${fgColor};">
+    <div class="card-body p-3">
+      <p class="card-text note-message mb-3">${quest.title}</p>
+      ${
+        quest.acceptedUsers.length > 0
+          ? "<small>accepted by " + quest.acceptedUsers.length + "</small><br>"
+          : ""
+      }
+      <small>${quest.timeMins} min</small>
+      <div class="d-flex justify-content-between align-items-center">
+        <small >#${quest.username}</small>
+        <div>
+          <button class="btn btn-sm btn-success accept-btn me-1" onclick="acceptQuest('${
+            quest._id
+          }')">
+            <i class="fa-solid fa-check"></i> ACCEPT
+          </button>
+          <button class="btn btn-sm btn-outline-danger delete-btn" onclick="rejectQuest('${
+            quest._id
+          }')">
+            <i class="fa-regular fa-trash-can"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+    `;
+
+        questGrid.appendChild(col);
+      });
+    }
+
+    function acceptQuest(questID) {
+      ws.send(JSON.stringify({ action: "ACCEPT", questID }));
+      requestBoardUpdate();
+
+      setTimeout(() => {
+        console.log("Redirecting...");
+        window.location.href = "quest-board/chat";
+      }, 1000); // waits 1 second
+    }
+
+    function rejectQuest(questID) {
+      ws.send(JSON.stringify({ action: "REJECT", questID }));
+      requestBoardUpdate();
+    }
+  </script>
+  <%- include('partials/chat-ws', { requestHelpWs: '/ws/request-help/chat',
+  questBoardWs: '/ws/quest-board/chat' }) %>
+</html>

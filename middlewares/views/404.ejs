@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quest Board</title>
+  <%- include('partials/head-tags') %> 
+</head>
+<body>
+  <%- include('partials/header') %>
+  <main>
+    <h1 style="text-align: center;">404 - Page Not Found</h1>
+  </main>
+  <%- include('partials/footer') %>
+</body>
+    <%- include('partials/footer') %>
+        <%- include('partials/chat-ws', { 
+          requestHelpWs: '/ws/request-help/chat', 
+          questBoardWs: '/ws/quest-board/chat' 
+    }) %>
+</html>

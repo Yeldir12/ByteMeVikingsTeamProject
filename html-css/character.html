@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Character Customization</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <a href="index.html">Home</a>
+    <a href="quests.html">Quests</a>
+    <a href="character.html" class="active">Character</a>
+    <a href="request.html">Request</a>
+    <a href="chat.html">Chat</a>
+  </nav>
+
+  <!-- Main Character Section -->
+  <main class="character-page">
+    <h1>Your Character</h1>
+
+    <!-- Profile Card -->
+    <section class="profile-card">
+      <img src="images/avatar.png" alt="Character Avatar" id="avatar" class="avatar" />
+      <h2 id="player-name">Player Name</h2>
+      <p>Level: <span id="player-level">5</span></p>
+      <p>Points: <span id="player-points">120</span></p>
+      <p>Status: <span id="player-status">🛡️ Knight Helper</span></p>
+    </section>
+
+    <!-- Customization Options -->
+    <section class="customization">
+      <h2>Customize Your Character</h2>
+
+      <!-- Name Change -->
+      <div class="custom-option">
+        <label for="name-input">Update Name:</label>
+        <input type="text" id="name-input" placeholder="Enter new name" />
+        <button id="save-name-btn">Save Name</button>
+      </div>
+
+      <!-- Gender Selection -->
+      <div class="custom-option">
+        <h3>Choose Gender</h3>
+        <button class="gender-btn">Male</button>
+        <button class="gender-btn">Female</button>
+      </div>
+
+      <!-- Class Selection -->
+      <div class="custom-option">
+        <h3>Choose Class</h3>
+        <button class="class-btn">Wizard</button>
+        <button class="class-btn">Knight</button>
+        <button class="class-btn">Ranger</button>
+      </div>
+
+      <!-- Outfit Selection -->
+      <div class="custom-option">
+        <h3>Choose Outfit</h3>
+        <div class="outfit-gallery">
+          <img src="images/characters/knight_male.png" alt="Knight Male" class="outfit-option" />
+          <img src="images/characters/mage_female_blue.png" alt="Mage Female Blue" class="outfit-option" />
+          <img src="images/characters/ranger_female_shadow.png" alt="Ranger Female Shadow" class="outfit-option" />
+          <img src="images/characters/female_nightcloak.png" alt="Female Nightcloak" class="outfit-option" />
+          <img src="images/characters/male_phantom.png" alt="Male Phantom" class="outfit-option" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Progress -->
+    <section class="progress">
+      <h2>Progress</h2>
+      <ul>
+        <li>Earned 20 points for helping on Quest #12</li>
+        <li>Rated 5 stars by Quest Seeker</li>
+        <li>Unlocked privilege: Access to Elite Board</li>
+      </ul>
+    </section>
+
+    <!-- Experience Bar -->
+    <section class="status-bar">
+      <h2>Experience</h2>
+      <div class="progress-container">
+        <div class="progress-bar" style="width: 60%;">60%</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 ByteMeVikings Project. All rights reserved.
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    const avatar = document.getElementById("avatar");
+    const outfitOptions = document.querySelectorAll(".outfit-option");
+    const nameInput = document.getElementById("name-input");
+    const saveNameBtn = document.getElementById("save-name-btn");
+    const playerName = document.getElementById("player-name");
+
+    outfitOptions.forEach(option => {
+      option.addEventListener("click", () => {
+        avatar.src = option.src;
+      });
+    });
+
+    saveNameBtn.addEventListener("click", () => {
+      if (nameInput.value.trim()) {
+        playerName.textContent = nameInput.value.trim();
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <style>
+        /* ===== CSS Variables ===== */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #7781a0;
+            --accent: #f59e0b;
+            --bg: #a3adbf;
+            --card-bg: #ffffff;
+            --text: #1d62c1;
+            --text-light: #6b7280;
+            --border: #d1d5db;
+            --error: #dc2626;
+            --success: #059669;
+            --radius: 8px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ===== Global Reset ===== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== Container ===== */
+        .container {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* ===== Header ===== */
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0 0 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        /* ===== Contact Card ===== */
+        .contact-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            padding: 2.5rem;
+        }
+
+        /* ===== Form Styles ===== */
+        .contact-form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .required {
+            color: var(--error);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-group input:invalid:not(:placeholder-shown),
+        .form-group textarea:invalid:not(:placeholder-shown) {
+            border-color: var(--error);
+        }
+
+        .form-group input:valid:not(:placeholder-shown),
+        .form-group textarea:valid:not(:placeholder-shown) {
+            border-color: var(--success);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* ===== Helper Text ===== */
+        .helper-text {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        /* ===== Submit Button ===== */
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            box-shadow: var(--shadow);
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===== Contact Info Section ===== */
+        .contact-info {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .contact-info h2 {
+            font-size: 1.25rem;
+            margin: 0 0 1rem;
+            color: var(--text);
+        }
+
+        .contact-methods {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .contact-method a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .contact-method a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 640px) {
+            .container {
+                margin: 1.5rem auto;
+            }
+
+            .contact-card {
+                padding: 1.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* ===== Success Message (hidden by default) ===== */
+        .success-message {
+            display: none;
+            background: blue;
+            color: var(--success);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>Contact Us</h1>
+            <p>We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+        </header>
+
+        <div class="contact-card">
+            <div class="success-message" id="successMessage">
+                ✓ Thank you! Your message has been sent successfully.
+            </div>
+
+            <form class="contact-form" id="contactForm" action="#" method="POST">
+                <div class="form-group">
+                    <label for="name">
+                        Full Name <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        placeholder="George Beef" 
+                        required 
+                        minlength="2"
+                        autocomplete="name"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        Email Address <span class="rawlaland@gmail.com">*</span>
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Georgebeef@gmail.com" 
+                        required
+                        autocomplete="email"
+                    >
+                    <p class="helper-text">We'll never share your email with anyone else.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">
+                        Phone Number (optional)
+                    </label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        placeholder="(8155566647)"
+                        autocomplete="tel"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">
+                        Subject <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="subject" 
+                        name="subject" 
+                        placeholder="How can we help?" 
+                        required
+                        minlength="3"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="message">
+                        Message <span class="required">*</span>
+                    </label>
+                    <textarea 
+                        id="message" 
+                        name="message" 
+                        placeholder="Write your message here..."
+                        required
+                        minlength="10"
+                    ></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    Send Message
+                </button>
+            </form>
+
+            <div class="contact-info">
+                <h2>How To Reach Us</h2>
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        📧 Email: <a href="mailto:rawlandjasi182@gmail.com">rawlandjasi182@gmail.com</a>
+                    </div>
+                    <div class="contact-method">
+                        📞 Phone: <a href="tel:+8155033549">(8155033549)</a>
+                    </div>
+                    <div class="contact-method">
+                        📍 Location: 123 Main Street, City, State 83440
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple form submission handler (for demonstration)
+        const form = document.getElementById('contactForm');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Remove this line when connecting to a real backend
+            
+            // Show success message
+            successMessage.classList.add('show');
+            
+            // Reset form
+            form.reset();
+            
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+            }, 5000);
+
+            // In a real application, you would send the form data to a server:
+            // const formData = new FormData(form);
+            // fetch('/api/contact', { method: 'POST', body: formData })
+            //     .then(response => response.json())
+            //     .then(data => { /* handle response */ });
+        });
+    </script>
+</body>
+</html>
