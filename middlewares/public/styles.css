@@ -261,9 +261,9 @@ footer {
     margin-bottom: 10px;
     position: static;
   }
-  header button {
+  /* header button {
     padding: 5px 0;
-  }
+  } */
   #header-padding {
     display: none;
   }
