@@ -8,7 +8,7 @@ body {
 
 #logo,
 h1,
-h2{
+h2, .special-font{
   font-family: "Pirata One", system-ui;
    /* font-family: "Manufacturing Consent", system-ui; */
   /* font-family: Arial, sans-serif; */
