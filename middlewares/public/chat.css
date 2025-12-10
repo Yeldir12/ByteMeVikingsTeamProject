@@ -40,6 +40,12 @@
   border-radius: 20px 20px 0px 20px;
 }
 
+#chatForm textarea{
+  width:100%;
+  min-height: 50px;
+  max-height: 200px;
+}
+
 .chat-message .author {
   font-weight: bold;
 }
