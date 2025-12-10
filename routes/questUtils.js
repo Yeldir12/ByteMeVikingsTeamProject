@@ -2,14 +2,24 @@ const database = require("../database");
 const { ObjectId } = require("mongodb");
 
 // Get unaccepted quests
-async function getUnacceptedQuests(username) {
+async function getUnacceptedQuests(username, getOnlyUnaccepted = false) {
   try {
-    return await database.questsCollection.find({
-      username: { $ne: username },
-      acceptedUsers: { $size: 0 },
-      rejectedUsers: { $ne: username }, // exclude if user rejected
-      completed: false
-    }).toArray();
+    if (getOnlyUnaccepted) {
+      //If get only unaccepted, we exclude quests other users have already accepted
+      return await database.questsCollection.find({
+        username: { $ne: username },
+        acceptedUsers: { $size: 0 },
+        rejectedUsers: { $ne: username }, // exclude if rejected
+        completed: false
+      }).toArray();
+    } else {
+      return await database.questsCollection.find({
+        username: { $ne: username },
+        acceptedUsers: { $ne: username }, // exclude if we have already accepted it
+        rejectedUsers: { $ne: username }, // exclude if rejected
+        completed: false
+      }).toArray();
+    }
   } catch (err) {
     console.log("ERROR GETTING QUESTS:", err);
     return [];
