@@ -99,11 +99,11 @@ class ChatModule {
           // --- RESOLVE QUEST ---
           else if (data.action === "RESOLVE_QUEST") {
             await questUtils.closeQuest(data.questDbId);
-
             this.sendToAllInvolved(data.questDbId, JSON.stringify({
               type: "QUEST_RESOLVED",
               questDbId: data.questDbId
             }));
+            await questUtils.deleteQuest(data.questDbId);
           }
 
           else if (data.action === "SELECT_QUEST") {
@@ -144,6 +144,7 @@ class ChatModule {
 
   async sendToAllInvolved(questId, data) {
     const quest = await questUtils.getQuest(questId);
+    if (quest === null) return;
     quest.acceptedUsers.forEach(user => {
       this.sendToUser(user, data);
     });

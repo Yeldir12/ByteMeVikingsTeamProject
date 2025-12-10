@@ -6,6 +6,23 @@ body {
   min-height: 100vh; /* ensures body is at least full viewport height */
 }
 
+#logo,
+h1,
+h2{
+  font-family: "Pirata One", system-ui;
+   /* font-family: "Manufacturing Consent", system-ui; */
+  /* font-family: Arial, sans-serif; */
+  font-weight: 500;
+  font-style: normal;
+}
+
+h3{
+  color: #696969;
+  font-size: 1.4em;
+  font-weight: 600;
+  font-style: normal;
+}
+
 html,
 body {
   height: 100%; /* full viewport height */
@@ -14,7 +31,6 @@ body {
 
 header #logo {
   color: rgb(0, 204, 255);
-  font-weight: 700;
   margin-right: 20px;
 }
 
@@ -190,6 +206,7 @@ footer {
 .message {
   text-align: center;
   margin-top: 15px;
+  font-size: 16px;
   padding: 10px;
   border-radius: 4px;
   display: none;

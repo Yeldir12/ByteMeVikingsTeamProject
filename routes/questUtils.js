@@ -119,9 +119,23 @@ async function closeQuest(idString) {
       { _id: new ObjectId(idString) },
       { $set: { completed: true } }
     );
+
     return result.modifiedCount > 0;
   } catch (err) {
     console.log("ERROR CLOSING QUEST:", err);
+    return false;
+  }
+}
+async function deleteQuest(idString) {
+  try {
+    result = await database.questsCollection.deleteOne({
+      _id: new ObjectId(idString)
+    });
+    deleteQuestThread(idString);
+
+    return result.modifiedCount > 0;
+  } catch (err) {
+    console.log("ERROR DELETING QUEST:", err);
     return false;
   }
 }
@@ -208,5 +222,6 @@ module.exports = {
   addMessage,
   getMessages,
   getMyQuests,
+  deleteQuest,
   deleteQuestThread
 };
