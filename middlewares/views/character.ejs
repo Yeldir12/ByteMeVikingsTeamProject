@@ -261,14 +261,14 @@
         if (charClass === "wizard") imgPath += "male-wizard.png";
         else if (charClass === "ranger") imgPath += "male-ranger.png";
         else if (charClass === "knight") imgPath += "male-knight.png";
-        else imgPath += "male_default.png";
+        else imgPath += "male-knight.png";
       } else if (gender === "female") {
         if (charClass === "wizard") imgPath += "female-wizard.png";
         else if (charClass === "ranger") imgPath += "female-ranger.png";
         else if (charClass === "knight") imgPath += "female-knight.png";
-        else imgPath += "female_default.png";
+        else imgPath += "female-knight.png";
       } else {
-        imgPath += "default_avatar.png";
+        imgPath += "male-knight.png";
       }
       console.log(imgPath);
       avatarEl.src = imgPath;
