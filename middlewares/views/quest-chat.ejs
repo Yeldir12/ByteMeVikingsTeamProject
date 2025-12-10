@@ -6,6 +6,7 @@
     <title><%= title %></title>
     <%- include('partials/head-tags') %>
     <link rel="stylesheet" href="/chat.css" />
+    <script src="/color.js"></script>
   </head>
 
   <body class="d-flex flex-column" style="height: 100%">
@@ -84,7 +85,9 @@
                 class="form-control form-control-sm"
                 id="fileInput"
               />
-              <button class="btn btn-primary" type="submit">Send</button>
+              <button class="btn btn-primary" type="submit" id="sendBtn">
+                Send
+              </button>
             </form>
           </div>
         </div>
@@ -192,12 +195,14 @@
         descriptionEl.textContent = "";
         resolveButtonEl.style.display = "none";
         setFormDisabled(true);
+        applyTheme("#f8f9fa");
         return;
       }
 
       // --- Quest selected ---
       titleEl.textContent = quest.title;
       descriptionEl.textContent = quest.description;
+      applyTheme(quest.color);
 
       // Highlight active quest
       document.querySelectorAll("li.list-group-item").forEach((li) => {
@@ -315,5 +320,66 @@
           'Hide Description <i class="fa-solid fa-caret-up"></i>';
       }
     });
+
+    function applyTheme(baseHex) {
+      baseHex = muteIfUgly(baseHex);
+      const root = document.documentElement;
+
+      // Convert hex → RGB
+      function hexToRgb(hex) {
+        hex = hex.replace("#", "");
+        if (hex.length === 3) {
+          hex = hex
+            .split("")
+            .map((c) => c + c)
+            .join("");
+        }
+        const num = parseInt(hex, 16);
+        return {
+          r: (num >> 16) & 255,
+          g: (num >> 8) & 255,
+          b: num & 255,
+        };
+      }
+
+      // Return perceived brightness 0–255
+      function brightness({ r, g, b }) {
+        return (r * 299 + g * 587 + b * 114) / 1000;
+      }
+
+      // Make a darker color (20% darker)
+      function darken({ r, g, b }, factor = 0.2) {
+        return {
+          r: Math.max(0, Math.floor(r * (1 - factor))),
+          g: Math.max(0, Math.floor(g * (1 - factor))),
+          b: Math.max(0, Math.floor(b * (1 - factor))),
+        };
+      }
+
+      // Convert RGB → hex
+      function rgbToHex({ r, g, b }) {
+        return (
+          "#" + [r, g, b].map((v) => v.toString(16).padStart(2, "0")).join("")
+        );
+      }
+
+      // Do the magic
+      const primaryRGB = hexToRgb(baseHex);
+      const primaryHex = rgbToHex(primaryRGB);
+
+      const complimentRGB = darken(primaryRGB, 0.25);
+      const complimentHex = rgbToHex(complimentRGB);
+
+      const textForeground = brightness(primaryRGB) < 130 ? "#fff" : "#333";
+
+      const complimentForeground =
+        brightness(complimentRGB) < 130 ? "#fff" : "#333";
+
+      // Apply CSS variables
+      root.style.setProperty("--color-primary", primaryHex);
+      root.style.setProperty("--color-compliment", complimentHex);
+      root.style.setProperty("--text-foreground", textForeground);
+      root.style.setProperty("--compliment-foreground", complimentForeground);
+    }
   </script>
 </html>

@@ -1,3 +1,10 @@
+:root {
+  --color-primary: #ffb5b5;
+  --color-compliment: #b11010;
+  --text-foreground: #333;
+  --compliment-foreground: #fff;
+}
+
 .chat-container {
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -5,6 +12,21 @@
   margin : 0 auto;
   opacity: 0.3;
 }
+.chat-container .list-group .active{
+  background-color: var(--color-primary);
+  color: var(--text-foreground);
+}
+
+.chat-container #resolveBtn, .chat-container #sendBtn{
+  background-color: var(--color-primary);
+  color: var(--text-foreground);
+  border-color: var(--color-compliment);
+}
+.chat-container #resolveBtn:hover, .chat-container #sendBtn:hover{
+  background-color: var(--color-compliment);
+  color: var(--compliment-foreground);
+}
+
 .threads {
   height: 100%;
   overflow-y: auto;
@@ -42,8 +64,8 @@
   border: 1px solid gray;
 }
 .blue-message {
-  background-color: blue;
-  color: #fff;
+  background-color: var(--color-compliment);
+  color: var(--compliment-foreground);
   border-radius: 20px 20px 0px 20px;
 }
 
@@ -55,13 +77,16 @@
 
 .chat-message .author {
   font-weight: bold;
+  color: inherit;
 }
 .chat-message .time {
   font-size: 0.8rem;
-  color: gray;
+  color: inherit;
+  opacity: 0.6;
 }
 .chat-message .text {
   margin-top: 0.25rem;
+  color: inherit;
 }
 .attachments img {
   max-width: 120px;
