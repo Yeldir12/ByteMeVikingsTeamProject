@@ -138,7 +138,13 @@
             console.log("Message does not belong to selected quest");
             //text-bg-primary
             //text-bg-warning
-            showMessageToast(data.username, data.message, "#", "Another Quest", "text-bg-primary");
+            showMessageToast(
+              data.username,
+              data.message,
+              "#",
+              "Another Quest",
+              "text-bg-primary"
+            );
             return;
           }
           addMessage(data);
@@ -281,7 +287,7 @@
       if (!selectedQuest) return;
 
       const yes = confirm(
-        "Are you sure?\nThis will permanently delete the quest thread."
+        "Are you sure?\nThis will permanently delete the quest thread and all participating users will no longer be able to send messages."
       );
 
       if (!yes) return; // user bailed, good for them
@@ -395,8 +401,6 @@
       root.style.setProperty("--compliment-foreground", complimentForeground);
     }
   </script>
-        <%- include('partials/chat-ws', { 
-          requestHelpWs: null, 
-          questBoardWs: null 
-    }) %>
+  <%- include('partials/chat-ws', { requestHelpWs: null, questBoardWs: null })
+  %>
 </html>
