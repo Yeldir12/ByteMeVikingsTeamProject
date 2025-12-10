@@ -3,6 +3,7 @@ const router = express.Router();
 const routeUtils = require('./routeUtils');
 const database = require("../database");
 const questUtils = require("./questUtils");
+const accountUtils = require("./accountUtils");
 const { WebSocketServer } = require("ws");
 
 
@@ -29,6 +30,9 @@ wssQuests.on("connection", (ws, request) => {
       ws.send(JSON.stringify({ type: "QUESTS_LIST", quests }));
     } else if (data.action === "ACCEPT") {
       var out = await questUtils.acceptQuest(data.questID, session.user);
+      
+      accountUtils.gainPoints(session.user, 10);
+
       // console.log("quest accepted: " + out);
     } else if (data.action === "REJECT") {
       var out = await questUtils.rejectQuest(data.questID, session.user);

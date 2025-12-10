@@ -7,20 +7,62 @@ function character_json(gender = "male", charClass = "wizard", armor = "basic-ar
         class: charClass,//wizard, knight, ranger
         armor, //basic-armor, elite-armor, legendary-robes
         weapon, //sword, bow, shield
-        //Extra stuff
-        points: 0,
-        level: 1
     };
+}
+
+async function gainPoints(username, points) {
+    try {
+        // Make sure points is a number
+        const p = Number(points);
+        if (isNaN(p)) {
+            console.error("gainPoints error: points must be a number");
+            return false;
+        }
+
+        // Use $inc — no need to fetch the account unless you want to
+        const result = await database.accountsCollection.updateOne(
+            { username },
+            { $inc: { characterPoints: p } }
+        );
+
+        if (result.matchedCount === 0) {
+            console.error(`gainPoints error: user '${username}' not found`);
+            return false;
+        }
+
+        console.log(`Character points updated for ${username} (+${p})`);
+        return true;
+
+    } catch (err) {
+        console.error("ERROR saving character points:", err);
+        return false;
+    }
+}
+
+
+function updateSession(req, account) {
+    req.session.user = account.username;
+    req.session.character = account.character;
+}
+
+async function saveCharacterToDB(username, character) {
+    try {
+        const result = await database.accountsCollection.updateOne(
+            { username }, // filter by username
+            { $set: { character: character } } // replace character
+        );
+        return true;
+    } catch (err) {
+        console.error("ERROR saving character:", err);
+        return false;
+    }
 }
 
 async function setCharacter(username, gender, charClass, armor, weapon) {
     try {
         var newCharacter = character_json(gender, charClass, armor, weapon);
         // console.log("Replacing character: ", newCharacter);
-        const result = await database.accountsCollection.updateOne(
-            { username },             // filter by username
-            { $set: { character: newCharacter } } // replace character
-        );
+        const result = await saveCharacterToDB(username, newCharacter);
 
         if (result.modifiedCount === 1) {
             console.log(`Character replaced for user ${username}`);
@@ -45,6 +87,7 @@ async function addAccount(username, password) {
         const result = await database.accountsCollection.insertOne({
             username: username,
             password: hashedPassword,
+            characterPoints: 0,
             character: character_json()
         });
 
@@ -81,6 +124,9 @@ async function getAccount(username) {
 module.exports = {
     setCharacter,
     addAccount,
+    saveCharacterToDB,
     isUsernameTaken,
-    getAccount
+    getAccount,
+    gainPoints,
+    updateSession
 };

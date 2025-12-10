@@ -10,6 +10,7 @@
     <script>
       // character is either null or an object from the session
       const character = <%- JSON.stringify(character || null) %>;
+      const CHARACTER_POINTS = <%- characterPoints || 0 %>;
     </script>
 
     <%- include('partials/header') %> <%- include('partials/not-signed-in') %>
@@ -31,19 +32,18 @@
           <% } %>
 
           <p class="mb-1">
-            Points: <span id="player-points" class="badge bg-success">120</span>
+            Points:
+            <span id="player-points" class="badge bg-success"></span>
           </p>
           <p>
             Level:
-            <span id="player-status" class="badge bg-warning text-dark"
-              >3 🛡️ Knight Helper</span
-            >
+            <span id="player-status" class="badge">Loading...</span>
           </p>
         </div>
       </section>
 
-           <!-- Progress / Achievements -->
-      <section id="progress" class="mb-5">
+      <!-- Progress / Achievements -->
+      <!-- <section id="progress" class="mb-5">
         <h2 class="mb-3">Progress & Achievements</h2>
         <ul class="list-group">
           <li
@@ -67,10 +67,10 @@
             <span class="badge bg-success rounded-pill">NEW</span>
           </li>
         </ul>
-      </section>
+      </section> -->
 
       <form action="/character" method="POST" id="character-form" class="mb-5">
-        <section id="customization" >
+        <section id="customization">
           <h2 class="mb-3">Customize Your Character</h2>
 
           <!-- Hidden fields to store actual submitted values -->
@@ -129,7 +129,7 @@
           </div>
 
           <!-- Armor Selection -->
-          <div id="armor-selection" class="mb-4" style="display: none;">
+          <div id="armor-selection" class="mb-4" style="display: none">
             <h3 class="mb-2">Outfits & Armor</h3>
             <div class="btn-group flex-wrap">
               <button
@@ -157,7 +157,7 @@
           </div>
 
           <!-- Weapons / Shields -->
-          <div id="weapon-selection" class="mb-4" style="display: none;">
+          <div id="weapon-selection" class="mb-4" style="display: none">
             <h3 class="mb-2">Weapons & Shields</h3>
             <div class="btn-group flex-wrap">
               <button
@@ -191,8 +191,6 @@
         </section>
       </form>
 
- 
-
       <!-- Visual Status Bar
       <section id="status-bar" class="mb-5">
         <h2 class="mb-2">Experience</h2>
@@ -215,6 +213,40 @@
     <%- include('partials/footer') %>
   </body>
   <script>
+    function getLevel(points) {
+      if (points >= 500) return { level: "Legend", color: "bg-danger" };
+      if (points >= 400) return { level: "Master", color: "bg-danger" };
+      if (points >= 300) return { level: "Expert", color: "bg-purple" };
+      if (points >= 200) return { level: "Veteran", color: "bg-primary" };
+      if (points >= 100) return { level: "Adept", color: "bg-info" };
+      if (points >= 50) return { level: "Apprentice", color: "bg-success" };
+      if (points >= 20)
+        return { level: "Squire", color: "bg-warning text-dark" };
+      if (points >= 10)
+        return { level: "Novice", color: "bg-warning text-dark" };
+      return { level: "Beginner", color: "bg-primary" };
+    }
+
+    // Update the DOM
+    function updatePlayerStatus(points) {
+      console.log("UPDATING PLAYER STATUS ", points);
+      const lvl = getLevel(points);
+
+      const pointsEl = document.getElementById("player-points");
+      const statusEl = document.getElementById("player-status");
+
+      if (pointsEl) pointsEl.textContent = points;
+
+      if (statusEl) {
+        statusEl.textContent = lvl.level;
+        statusEl.className = "badge " + lvl.color;
+      }
+    }
+
+    // Apply immediately on page load
+    updatePlayerStatus(CHARACTER_POINTS);
+
+
     function updateAvatar(character) {
       const avatarEl = document.getElementById("avatar");
       if (!avatarEl || !character) return;

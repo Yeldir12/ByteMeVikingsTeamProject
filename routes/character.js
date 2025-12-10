@@ -5,8 +5,11 @@ const accountUtils = require("./accountUtils");
 
 // GET /character
 router.get('/', async (req, res) => {
+  var account = await accountUtils.getAccount(req.session.user);
+  
   routeUtils.renderPage(req, res, 'character', {
-    character: req.session.character
+    character: req.session.character,
+    characterPoints: account.characterPoints
   });
 });
 

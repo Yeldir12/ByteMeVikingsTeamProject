@@ -75,13 +75,11 @@ router.post("/login", async (req, res) => {
     if (account == null) {
         return res.status(400).json({ error: "Account not found." });
     }
-
     console.log("Account: ", account);
     if (await bcrypt.compare(password, account.password) == false) {
         return res.status(400).json({ error: "Invalid credentials." });
     }
-    req.session.user = username;
-    req.session.character = account.character;
+    accountUtils.updateSession(req, account);
     console.log("Logged in with session: ", JSON.stringify(req.session));
     return res.status(200).json({ message: "Signed in." });
 
