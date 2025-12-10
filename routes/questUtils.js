@@ -16,7 +16,7 @@ async function getUnacceptedQuests(username) {
   }
 }
 
-async function getQuest(idString){
+async function getQuest(idString) {
   try {
     return await database.questsCollection.findOne({ _id: new ObjectId(idString) });
   } catch (err) {
@@ -47,12 +47,18 @@ async function newQuest(username, title, description, color, timeMins) {
 }
 
 // Get quests accepted by user
-async function getAcceptedQuests(username) {
+async function getAcceptedQuests(username, getAll = false) {
   try {
-    return await database.questsCollection.find({
-      acceptedUsers: username,
-      completed: false
-    }).toArray();
+    if (getAll) {
+      return await database.questsCollection.find({
+        acceptedUsers: username
+      }).toArray();
+    } else {
+      return await database.questsCollection.find({
+        acceptedUsers: username,
+        completed: false
+      }).toArray();
+    }
   } catch (err) {
     console.log("ERROR GETTING ACCEPTED QUESTS:", err);
     return [];
@@ -60,12 +66,18 @@ async function getAcceptedQuests(username) {
 }
 
 //Get quests created by user
-async function getMyQuests(username) {
+async function getMyQuests(username, getAll = false) {
   try {
-    return await database.questsCollection.find({
-      username: username,
-      completed: false
-    }).toArray();
+    if (getAll) {
+      return await database.questsCollection.find({
+        username: username
+      }).toArray();
+    } else {
+      return await database.questsCollection.find({
+        username: username,
+        completed: false
+      }).toArray();
+    }
   } catch (err) {
     console.log("ERROR GETTING ACCEPTED QUESTS:", err);
     return [];

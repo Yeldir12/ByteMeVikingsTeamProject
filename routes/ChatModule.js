@@ -3,10 +3,12 @@ const { WebSocketServer } = require("ws");
 const questUtils = require("./questUtils");
 const routeUtils = require("./routeUtils");
 
+const userSockets = new Map();
+
 class ChatModule {
   constructor(config) {
     this.grabAcceptedQuests = config.grabAcceptedQuests;
-    this.address = config.address;                    // e.g. "/ws/chat"
+    this.address = config.address;
     this.title = config.title || "Chat";
     this.otherPageTitle = config.otherPageTitle || "Home";
     this.otherPageLink = config.otherPageLink || "/";
@@ -18,9 +20,9 @@ class ChatModule {
 
       var acceptedQuests;
       if (this.grabAcceptedQuests) {
-        acceptedQuests = await questUtils.getAcceptedQuests(req.session.user);
+        acceptedQuests = await questUtils.getAcceptedQuests(req.session.user, false);
       } else {
-        acceptedQuests = await questUtils.getMyQuests(req.session.user);
+        acceptedQuests = await questUtils.getMyQuests(req.session.user, false);
       }
 
       this.startingQuest = null;
@@ -51,6 +53,7 @@ class ChatModule {
         ws.close();
         return;
       }
+      userSockets.set(session.user, ws);
 
       ws.send(JSON.stringify({
         type: "INFO",
@@ -58,76 +61,95 @@ class ChatModule {
       }));
 
       ws.on("message", async (msg) => {
-        console.log("WS: " + msg);
-        const data = JSON.parse(msg);
+        try {
+          // console.log("WS: " + msg);
+          const data = JSON.parse(msg);
 
-        // --- SEND MESSAGE ---
-        if (data.action === "SEND_MESSAGE") {
-          const { questDbId, message, attachments } = data;
+          // --- SEND MESSAGE ---
+          if (data.action === "SEND_MESSAGE") {
+            const { questDbId, message, attachments } = data;
 
-          await questUtils.addMessage(
-            questDbId,
-            session.user,
-            message,
-            attachments || []
-          );
+            await questUtils.addMessage(
+              questDbId,
+              session.user,
+              message,
+              attachments || []
+            );
 
-          this.broadcast({
-            type: "NEW_MESSAGE",
-            questDbId,
-            username: session.user,
-            message,
-            attachments: attachments || [],
-            timestamp: Date.now()
-          });
-        }
+            this.sendToAllInvolved(questDbId, JSON.stringify({
+              type: "NEW_MESSAGE",
+              questDbId,
+              username: session.user,
+              message,
+              attachments: attachments || [],
+              timestamp: Date.now()
+            }));
+          }
 
-        // --- GET MESSAGES ---
-        else if (data.action === "GET_MESSAGES") {
-          const messages = await questUtils.getMessages(data.questDbId);
-          ws.send(JSON.stringify({
-            type: "MESSAGES_LIST",
-            questDbId: data.questDbId,
-            messages
-          }));
-        }
+          // --- GET MESSAGES ---
+          else if (data.action === "GET_MESSAGES") {
+            const messages = await questUtils.getMessages(data.questDbId);
+            ws.send(JSON.stringify({
+              type: "MESSAGES_LIST",
+              questDbId: data.questDbId,
+              messages
+            }));
+          }
 
-        // --- RESOLVE QUEST ---
-        else if (data.action === "RESOLVE_QUEST") {
-          await questUtils.closeQuest(data.questDbId);
+          // --- RESOLVE QUEST ---
+          else if (data.action === "RESOLVE_QUEST") {
+            await questUtils.closeQuest(data.questDbId);
 
-          this.broadcast({
-            type: "QUEST_RESOLVED",
-            questDbId: data.questDbId
-          });
-        }
+            this.sendToAllInvolved(data.questDbId, JSON.stringify({
+              type: "QUEST_RESOLVED",
+              questDbId: data.questDbId
+            }));
+          }
 
-        else if (data.action === "SELECT_QUEST") {
-          const messages = await questUtils.getMessages(data.questDbId);
-          const quest = await questUtils.getQuest(data.questDbId);
-          ws.send(JSON.stringify({
-            type: "SELECT_QUEST",
-            quest,
-            messages
-          }));
+          else if (data.action === "SELECT_QUEST") {
+            const messages = await questUtils.getMessages(data.questDbId);
+            const quest = await questUtils.getQuest(data.questDbId);
+            ws.send(JSON.stringify({
+              type: "SELECT_QUEST",
+              quest,
+              messages
+            }));
+          }
+        } catch (e) {
+          console.log("Chat websocket error ", e);
         }
       });
 
       ws.on("close", () => {
         console.log("Chat WS closed");
+        userSockets.delete(session.user);
       });
     });
   }
 
   // -----------------------------
-  //   WebSocket Broadcast
+  //   WebSocket methods
   // -----------------------------
-  broadcast(obj) {
-    const data = JSON.stringify(obj);
+  broadcast(data) {
     this.wss.clients.forEach((client) => {
       if (client.readyState === 1) client.send(data);
     });
   }
+
+  sendToUser(user, data) {
+    if (userSockets.has(user)) {
+      userSockets.get(user).send(data);
+    }
+  }
+
+  async sendToAllInvolved(questId, data) {
+    const quest = await questUtils.getQuest(questId);
+    quest.acceptedUsers.forEach(user => {
+      this.sendToUser(user, data);
+    });
+    this.sendToUser(quest.username, data);
+  }
+
 }
 
 module.exports = ChatModule;

@@ -40,9 +40,7 @@
 
             <li
               onclick="selectQuest('<%= quest._id %>')"
-              class="list-group-item d-flex justify-content-between align-items-center 
-              <%= quest.completed === 'true' ? 'disabled' : '' %> 
-              <%= startingQuest != null && quest._id === startingQuest._id ? 'active' : '' %>"
+              class="list-group-item d-flex justify-content-between align-items-center <%= quest.completed === 'true' ? 'disabled' : '' %> <%= startingQuest != null && quest._id === startingQuest._id ? 'active' : '' %>"
               data-quest-id="<%= quest._id %>"
             >
               <span><%= quest.title %></span>
@@ -60,7 +58,7 @@
             <h5 class="mb-0" id="chat-title">Homework Help</h5>
             <div>
               <button class="btn btn-sm btn-success" id="resolveBtn">
-                Resolve Thread
+                Resolve Quest
               </button>
             </div>
           </div>
@@ -123,7 +121,7 @@
         } else if (data.type === "NEW_MESSAGE") {
           addMessage(data);
         } else if (data.type === "QUEST_RESOLVED") {
-          alert("Quest resolved!");
+          window.location.reload();
         }
       };
 
@@ -170,22 +168,40 @@
     }
 
     function applySelectedQuest(quest) {
-      if (!quest) return;
-
-      // 1️⃣ Update the chat header title
       const titleEl = document.querySelector("#chat-title");
-      if (titleEl) {
-        titleEl.textContent = quest.title;
+      const resolveButtonEl = document.getElementById("resolveBtn");
+      const chatFormEl = document.getElementById("chatForm");
+
+      // Helper to disable every input/textarea/button inside the form
+      const setFormDisabled = (disabled) => {
+        chatFormEl.querySelectorAll("input, textarea, button").forEach((el) => {
+          el.disabled = disabled;
+        });
+      };
+
+      if (!quest) {
+        titleEl.textContent = "No quest selected";
+        resolveButtonEl.style.display = "none";
+        setFormDisabled(true);
+        return;
       }
 
-      // 2️⃣ Update the active highlight in the left quest list
-      document.querySelectorAll("li.list-group-item").forEach((li) => {
-        li.classList.remove("active");
+      // --- Quest selected ---
+      titleEl.textContent = quest.title;
 
-        if (li.dataset.questId === quest._id) {
-          li.classList.add("active");
-        }
+      // Highlight active quest
+      document.querySelectorAll("li.list-group-item").forEach((li) => {
+        li.classList.toggle("active", li.dataset.questId === quest._id);
       });
+
+      // Show resolve/delete button
+      resolveButtonEl.style.display = "inline";
+      resolveButtonEl.textContent = quest.completed
+        ? "Delete Quest"
+        : "Resolve Quest";
+
+      // Enable controls again
+      setFormDisabled(false);
     }
 
     function loadMessages(list) {
@@ -234,12 +250,14 @@
     }
 
     document.getElementById("resolveBtn").addEventListener("click", () => {
-      ws.send(
-        JSON.stringify({
-          action: "RESOLVE_QUEST",
-          questDbId: selectedQuest._id,
-        })
-      );
+      if (selectedQuest != null) {
+        ws.send(
+          JSON.stringify({
+            action: "RESOLVE_QUEST",
+            questDbId: selectedQuest._id,
+          })
+        );
+      }
     });
 
     // Auto-adjust height
