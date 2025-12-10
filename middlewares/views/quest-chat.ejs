@@ -12,7 +12,10 @@
     <%- include('partials/head-tags') %>
     <link rel="stylesheet" href="/chat.css" />
     <script src="/color.js"></script>
+
+    <!-- markdown and dompurify -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://unpkg.com/dompurify@3.0.0/dist/purify.min.js"></script>
   </head>
 
   <body class="d-flex flex-column" style="height: 100%">
@@ -175,7 +178,10 @@
         el.classList.add("blue-message");
       }
 
+      // Markdown to HTML
       var messageBodyHTML = marked.parse(msg.message);
+      // DOMPurify sanitizes the HTML
+      messageBodyHTML = DOMPurify.sanitize(messageBodyHTML);
 
       el.innerHTML = `
         <div class="author">${msg.username} <span class="time">${new Date(
