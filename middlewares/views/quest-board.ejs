@@ -35,7 +35,8 @@
     <%- include('partials/footer') %>
   </body>
   <script>
-    const ws = new WebSocket(`ws://${location.origin}/ws/quest-board`);
+    const protocol = location.protocol === "https:" ? "wss" : "ws";
+    const ws = new WebSocket(`${protocol}://${location.host}/ws/quest-board`);
 
     function requestBoardUpdate() {
       ws.send(JSON.stringify({ action: "GET_QUESTS" }));

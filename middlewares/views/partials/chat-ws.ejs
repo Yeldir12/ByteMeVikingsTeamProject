@@ -64,7 +64,8 @@
         return;
       }
 
-      const wsUrl = `ws://${location.origin}${cfg.address}`;
+      const protocol = location.protocol === "https:" ? "wss" : "ws";
+      const wsUrl = `${protocol}://${location.host}${cfg.address}`;
       const ws = new WebSocket(wsUrl);
       console.log(`Attempting connection to ${cfg.label} WS at ${wsUrl}`);
 

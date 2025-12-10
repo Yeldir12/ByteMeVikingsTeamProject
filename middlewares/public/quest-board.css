@@ -6,12 +6,12 @@
 }
 
 .note-card:nth-child(even):hover {
-    scale: 1.1;
-    rotate: 2deg;
+  scale: 1.1;
+  rotate: 2deg;
 }
 .note-card:nth-child(odd):hover {
-    scale: 1.1;
-    rotate: -2deg;
+  scale: 1.1;
+  rotate: -2deg;
 }
 
 .note-card small {
@@ -25,4 +25,12 @@
   color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+
+.accept-btn {
+  float: right;
+}
+
+.delete-btn {
+  float: right;
 }
