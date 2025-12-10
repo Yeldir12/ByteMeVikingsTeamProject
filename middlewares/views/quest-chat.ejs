@@ -109,7 +109,7 @@
     let ws;
 
     function connectWS() {
-      ws = new WebSocket(`ws://${location.host}${CHAT_WS}`);
+      ws = new WebSocket(`ws://${location.origin}${CHAT_WS}`);
 
       ws.onopen = () => {
         console.log("WS connected!");
