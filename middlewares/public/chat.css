@@ -17,6 +17,11 @@
   color: var(--text-foreground);
 }
 
+.block-bold{
+  display: block;
+  margin-bottom: 5px;
+}
+
 .chat-container #resolveBtn, .chat-container #sendBtn{
   background-color: var(--color-primary);
   color: var(--text-foreground);

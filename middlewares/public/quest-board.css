@@ -9,6 +9,8 @@
   scale: 1.1;
   rotate: 2deg;
 }
+
+
 .note-card:nth-child(odd):hover {
   scale: 1.1;
   rotate: -2deg;

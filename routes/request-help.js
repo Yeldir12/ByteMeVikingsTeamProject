@@ -23,8 +23,8 @@ router.post('/', (req, res) => {
       const timeMins = req.body.timeMins;
 
       //Check the length of all elements to prevent unreasonable requests
-      if (title.length > 55) {
-        return res.status(400).json({ error: "Title too long (55 characters max)" });
+      if (title.length > 60) {
+        return res.status(400).json({ error: "Title too long (60 characters max)" });
       }
 
       if (description.length > 500) {

@@ -64,7 +64,7 @@
 
               <div class="d-flex align-items-center gap-2">
                 <button class="btn btn-light btn-sm" id="descToggleBtn">
-                  Show Description <i class="fa-solid fa-caret-down"></i>
+                  Show Details <i class="fa-solid fa-caret-down"></i>
                 </button>
 
                 <button class="btn btn-sm btn-success" id="resolveBtn">
@@ -221,7 +221,20 @@
       // --- Quest selected ---
       titleEl.textContent =
         quest.title + (quest.completed == true ? " (resolved)" : "");
-      descriptionEl.textContent = quest.description;
+
+      descriptionEl.innerHTML = "";
+      if (quest.username !== USERNAME) {
+        descriptionEl.innerHTML += `<b class='block-bold'>#${quest.username}</b>`;
+      }
+
+      if (quest.acceptedUsers.length > 0) {
+        descriptionEl.innerHTML += `<b class='block-bold'>Accepted by: ${quest.acceptedUsers.join(
+          ", "
+        )}</b>${quest.description}`;
+      } else {
+        descriptionEl.innerHTML += `<b class='block-bold'>No one has accepted this quest yet.</b>${quest.description}`;
+      }
+
       applyTheme(quest.color);
 
       // Highlight active quest
@@ -333,11 +346,11 @@
       if (isVisible) {
         desc.style.display = "none";
         toggleBtn.innerHTML =
-          'Show Description <i class="fa-solid fa-caret-down"></i>';
+          'Show Details <i class="fa-solid fa-caret-down"></i>';
       } else {
         desc.style.display = "block";
         toggleBtn.innerHTML =
-          'Hide Description <i class="fa-solid fa-caret-up"></i>';
+          'Hide Details <i class="fa-solid fa-caret-up"></i>';
       }
     });
 
