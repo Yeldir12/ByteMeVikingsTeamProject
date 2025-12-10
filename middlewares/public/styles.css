@@ -255,15 +255,14 @@ footer {
     border-bottom: none;
     padding-left: 10px;
     border-left: 2px solid white;
-  } */
-
+  } */ header button {
+    padding: 8px 0;
+  } 
   #header-container {
     margin-bottom: 10px;
     position: static;
   }
-  /* header button {
-    padding: 5px 0;
-  } */
+
   #header-padding {
     display: none;
   }
