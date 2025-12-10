@@ -7,6 +7,8 @@
 
     <%- include('partials/head-tags') %>
 
+
+
     <style>
       body {
         background-image: url('/images/banner.jpg'); /* Change path as needed */
@@ -89,17 +91,17 @@
                 <span class="text-primary">BraveQuests</span>!
               </h2>
 
-              <h4 class="text-center mb-4">
+              <h2 class="text-center mb-6" style="color: #4a6cf7">
                 Embark on quests, lend a heroic hand, and level up your character!
-              </h4>
+              </h2>
 
-              <p class="fs-5">
+              <p class="fs-6">
                 Whether you're rescuing a lost pet, delivering messages,
                 or helping fellow adventurers conquer challenges,
                 every heroic deed earns you valuable points.
               </p>
 
-              <p class="fs-5">
+              <p class="fs-6">
                 Spend your points to unlock abilities, upgrade gear,
                 collect special outfits, and rise through the heroic ranks.
                 The more you help others, the stronger your legend becomes!
@@ -114,5 +116,9 @@
     </main>
 
     <%- include('partials/footer') %>
+        <%- include('partials/chat-ws', { 
+          requestHelpWs: '/ws/request-help/chat', 
+          questBoardWs: '/ws/quest-board/chat' 
+    }) %>
   </body>
 </html>

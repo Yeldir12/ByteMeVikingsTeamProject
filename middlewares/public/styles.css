@@ -8,15 +8,16 @@ body {
 
 #logo,
 h1,
-h2, .special-font{
+h2,
+.special-font {
   font-family: "Pirata One", system-ui;
-   /* font-family: "Manufacturing Consent", system-ui; */
+  /* font-family: "Manufacturing Consent", system-ui; */
   /* font-family: Arial, sans-serif; */
   font-weight: 500;
   font-style: normal;
 }
 
-h3{
+h3 {
   color: #696969;
   font-size: 1.4em;
   font-weight: 600;
@@ -220,4 +221,11 @@ footer {
   background-color: #f8d7da;
   color: #721c24;
   display: block;
+}
+
+#chat-toast-container {
+  position: fixed;
+  left: 20px;
+  top: 90px;
+  z-index: 99999;
 }

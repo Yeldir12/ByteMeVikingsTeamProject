@@ -1,0 +1,103 @@
+<!-- chat-toast.ejs partial -->
+
+<!-- Toast container always in HTML -->
+<div id="chat-toast-container" class="toast-container position-fixed end-0 p-3"></div>
+
+<script>
+  (function () {
+    const wsConfigs = [
+      {
+        address: "<%= requestHelpWs || '' %>",
+        label: "Request Help",
+        colorClass: "text-bg-success",
+        questLink: "/request-help/chat" // generic link for this chat
+      },
+      {
+        address: "<%= questBoardWs || '' %>",
+        label: "Quest Board",
+        colorClass: "text-bg-primary",
+        questLink: "/quest-board/chat" // generic link for this chat
+      },
+    ];
+
+    const wsProtocol = location.protocol === "https:" ? "wss" : "ws";
+    const container = document.getElementById("chat-toast-container");
+
+    // ------------------------------
+    // Global toast function
+    // ------------------------------
+    window.showMessageToast = function(username, message, questLink, label, colorClass) {
+      console.log(`Showing toast for ${label || 'Custom'}: ${username} - ${message}`);
+
+      const toastEl = document.createElement("div");
+      toastEl.className = `toast align-items-center ${colorClass || 'text-bg-info'} border-0`;
+      toastEl.setAttribute("role", "alert");
+      toastEl.setAttribute("aria-live", "assertive");
+      toastEl.setAttribute("aria-atomic", "true");
+
+      toastEl.innerHTML = `
+        <div class="d-flex">
+          <div class="toast-body">
+            <strong>${username}</strong> (${label || 'Custom'}): ${message}
+            <br>
+            <!--<a href="${questLink}" class="text-white text-decoration-underline">View Quest</a>-->
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      `;
+
+      container.appendChild(toastEl);
+
+      // Force reflow for first toast to display correctly
+      requestAnimationFrame(() => {
+        const bsToast = new bootstrap.Toast(toastEl, { autohide: false });
+        bsToast.show();
+      });
+    };
+
+    // ------------------------------
+    // WebSocket connections
+    // ------------------------------
+    wsConfigs.forEach(cfg => {
+      if (!cfg.address) {
+        console.log(`Skipping ${cfg.label} WS because address is empty.`);
+        return;
+      }
+
+      const wsUrl = `${wsProtocol}://${location.host}${cfg.address}`;
+      const ws = new WebSocket(wsUrl);
+      console.log(`Attempting connection to ${cfg.label} WS at ${wsUrl}`);
+
+      ws.addEventListener("open", () => console.log(`Connected to ${cfg.label} WS!`));
+
+      ws.addEventListener("message", (event) => {
+        console.log(`[${cfg.label} WS] Received message:`, event.data);
+        try {
+          const data = JSON.parse(event.data);
+          if (data.type === "NEW_MESSAGE") {
+            // Call global toast function
+            showMessageToast(
+              data.username,
+              data.message,
+              cfg.questLink, // generic link
+              cfg.label,
+              cfg.colorClass
+            );
+          } else {
+            console.log(`[${cfg.label} WS] Non-message event:`, data);
+          }
+        } catch (e) {
+          console.error(`[${cfg.label} WS] Error parsing message:`, e);
+        }
+      });
+
+      ws.addEventListener("close", event =>
+        console.log(`${cfg.label} WS closed. Code: ${event.code}, Reason: ${event.reason}`)
+      );
+
+      ws.addEventListener("error", err =>
+        console.error(`${cfg.label} WS error:`, err)
+      );
+    });
+  })();
+</script>

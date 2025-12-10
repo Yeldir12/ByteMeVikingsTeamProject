@@ -134,6 +134,13 @@
           applySelectedQuest(selectedQuest);
           loadMessages(data.messages);
         } else if (data.type === "NEW_MESSAGE") {
+          if (data.questDbId !== selectedQuest._id) {
+            console.log("Message does not belong to selected quest");
+            //text-bg-primary
+            //text-bg-warning
+            showMessageToast(data.username, data.message, "#", "Another Quest", "text-bg-primary");
+            return;
+          }
           addMessage(data);
         } else if (data.type === "QUEST_RESOLVED") {
           window.location.reload();
@@ -388,4 +395,9 @@
       root.style.setProperty("--compliment-foreground", complimentForeground);
     }
   </script>
+        <%- include('partials/footer') %>
+        <%- include('partials/chat-ws', { 
+          requestHelpWs: null, 
+          questBoardWs: null 
+    }) %>
 </html>
