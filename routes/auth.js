@@ -4,7 +4,7 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const router = express.Router();
 const routeUtils = require('./routeUtils');
-const database = require("../database");
+const accountUtils = require("./accountUtils");
 
 //Important registration methods
 //If we are already logged in, redirect to the homepage
@@ -14,46 +14,6 @@ function redirectIfLoggedIn(req, res, next) {
     }
     next();
 }
-
-async function addAccount(username, password) {
-    try {
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds); //Hash the password
-        console.log("Adding account to database...");
-        const result = await database.accountsCollection.insertOne({
-            username: username,
-            password: hashedPassword
-        });
-        return true;
-    } catch (err) {
-        console.log("ERROR ADDING ACCOUNT:", err);
-        return false;
-    }
-}
-
-async function isUsernameTaken(username) {
-    try {
-        // Search for a document with this username
-        const existing = await database.accountsCollection.findOne({ username: username });
-        console.log("Existing username ", existing, existing !== null)
-        // If a document is found, username is taken
-        return existing !== null;
-    } catch (err) {
-        console.error("ERROR checking username:", err);
-        return true; // safer to assume taken if DB fails
-    }
-}
-
-async function getAccount(username) {
-    try {
-        return await database.accountsCollection.findOne({ username: username });
-    } catch (err) {
-        console.error("ERROR getting account:", err);
-        return null;
-    }
-}
-
-
 
 
 //Endpoints
@@ -86,11 +46,11 @@ router.post("/register", async (req, res) => {
         return res.status(400).json({ error: "Username must be less than 20 characters" });
     }
 
-    if (await isUsernameTaken(username)) {
+    if (await accountUtils.isUsernameTaken(username)) {
         return res.status(400).json({ error: "Username \"" + username + "\" already exists" });
     }
 
-    if (await addAccount(username, password)) {
+    if (await accountUtils.addAccount(username, password)) {
         return res.json({ message: "Welcome \"" + username + "\"!" });
     } else {
         return res.json({ error: "Error Adding account" });
@@ -111,19 +71,18 @@ router.post("/login", async (req, res) => {
     username = username.toLowerCase().trim();
     password = password.trim();
 
-    const account = await getAccount(username);
+    const account = await accountUtils.getAccount(username);
     if (account == null) {
         return res.status(400).json({ error: "Account not found." });
     }
 
     console.log("Account: ", account);
-
     if (await bcrypt.compare(password, account.password) == false) {
         return res.status(400).json({ error: "Invalid credentials." });
     }
-
-    console.log("Logged in");
     req.session.user = username;
+    req.session.character = account.character;
+    console.log("Logged in with session: ", JSON.stringify(req.session));
     return res.status(200).json({ message: "Signed in." });
 
 });

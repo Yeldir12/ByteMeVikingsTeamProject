@@ -7,6 +7,11 @@
     <%- include('partials/head-tags') %>
   </head>
   <body>
+    <script>
+      // character is either null or an object from the session
+      const character = <%- JSON.stringify(character || null) %>;
+    </script>
+
     <%- include('partials/header') %> <%- include('partials/not-signed-in') %>
     <main id="character-page" class="container py-4">
       <h1 id="character-title" class="text-center mb-5">Your Character</h1>
@@ -18,7 +23,6 @@
             src="/images/Ranger_thumbnail01.png"
             alt="Character Avatar"
             id="avatar"
-            class="rounded-circle mb-3"
             style="height: 120px"
           />
 
@@ -212,6 +216,35 @@
     <%- include('partials/footer') %>
   </body>
   <script>
+    function updateAvatar(character) {
+      const avatarEl = document.getElementById("avatar");
+      if (!avatarEl || !character) return;
+
+      const { gender, class: charClass } = character;
+      console.log("UPDATING CHARACTER ", character);
+      let imgPath = "/images/variants/";
+
+      // Determine image filename based on gender + class
+      if (gender === "male") {
+        if (charClass === "wizard") imgPath += "male-wizard.png";
+        else if (charClass === "ranger") imgPath += "male-ranger.png";
+        else if (charClass === "knight") imgPath += "male-knight.png";
+        else imgPath += "male_default.png";
+      } else if (gender === "female") {
+        if (charClass === "wizard") imgPath += "female-wizard.png";
+        else if (charClass === "ranger") imgPath += "female-ranger.png";
+        else if (charClass === "knight") imgPath += "female-knight.png";
+        else imgPath += "female_default.png";
+      } else {
+        imgPath += "default_avatar.png";
+      }
+      console.log(imgPath);
+      avatarEl.src = imgPath;
+    }
+
+    // Call it once on page load
+    updateAvatar(character);
+
     // Generic helper to update hidden inputs + highlight buttons
     function setupSelection(buttonClass, inputId) {
       document.querySelectorAll(buttonClass).forEach((btn) => {
