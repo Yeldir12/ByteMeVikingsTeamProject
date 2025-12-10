@@ -1,5 +1,5 @@
 .note-card {
-  min-width: 300px;
+  /* min-width: 300px; */
   border: 1px solid gray;
   color: white;
   transition: all 0.3s ease;
