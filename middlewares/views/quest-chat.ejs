@@ -12,6 +12,7 @@
     <%- include('partials/head-tags') %>
     <link rel="stylesheet" href="/chat.css" />
     <script src="/color.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
 
   <body class="d-flex flex-column" style="height: 100%">
@@ -82,7 +83,7 @@
               <textarea
                 id="message"
                 rows="3"
-                placeholder="Type your message..."
+                placeholder="Type your message (Markdown supported)..."
               ></textarea>
               <input
                 style="display: none"
@@ -174,11 +175,13 @@
         el.classList.add("blue-message");
       }
 
+      var messageBodyHTML = marked.parse(msg.message);
+
       el.innerHTML = `
         <div class="author">${msg.username} <span class="time">${new Date(
         msg.timestamp
       ).toLocaleTimeString()}</span></div>
-        <div class="text">${msg.message}</div>
+        <div class="text">${messageBodyHTML}</div>
         ${
           msg.attachments && msg.attachments.length
             ? `
@@ -320,7 +323,6 @@
       const footer = document.getElementById("site-footer");
       const main = document.getElementById("main");
       const chat = document.getElementById("chat-container");
-      
 
       const headerH = parseFloat(header?.style.marginBottom) || 0;
       const footerH = footer?.offsetHeight || 0;
@@ -329,7 +331,16 @@
       const paddingTop = parseFloat(style.paddingTop) || 0;
       const paddingBottom = parseFloat(style.paddingBottom) || 0;
 
-      console.log("headerH:", headerH, "footerH:", footerH, "paddingTop:", paddingTop, "paddingBottom:", paddingBottom);
+      console.log(
+        "headerH:",
+        headerH,
+        "footerH:",
+        footerH,
+        "paddingTop:",
+        paddingTop,
+        "paddingBottom:",
+        paddingBottom
+      );
       const totalUsed = headerH + footerH + paddingTop + paddingBottom;
 
       chat.style.height = `calc(100vh - ${totalUsed}px)`;
