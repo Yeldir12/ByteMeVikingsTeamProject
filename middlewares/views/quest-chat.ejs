@@ -62,7 +62,7 @@
             <div class="d-flex justify-content-between p-2">
               <h5 class="mb-0" id="chat-title">Title</h5>
 
-              <div class="d-flex align-items-center gap-2">
+              <div class="d-flex align-items-center gap-2" id="quest-actions">
                 <button class="btn btn-light btn-sm" id="descToggleBtn">
                   Show Details <i class="fa-solid fa-caret-down"></i>
                 </button>
@@ -320,15 +320,18 @@
       const footer = document.getElementById("site-footer");
       const main = document.getElementById("main");
       const chat = document.getElementById("chat-container");
+      
 
-      const headerH = parseFloat(header?.style.height) || 0;
+      const headerH = parseFloat(header?.style.marginBottom) || 0;
       const footerH = footer?.offsetHeight || 0;
 
       const style = getComputedStyle(main);
       const paddingTop = parseFloat(style.paddingTop) || 0;
       const paddingBottom = parseFloat(style.paddingBottom) || 0;
 
+      console.log("headerH:", headerH, "footerH:", footerH, "paddingTop:", paddingTop, "paddingBottom:", paddingBottom);
       const totalUsed = headerH + footerH + paddingTop + paddingBottom;
+
       chat.style.height = `calc(100vh - ${totalUsed}px)`;
       chat.style.opacity = "1";
     }

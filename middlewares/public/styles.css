@@ -6,6 +6,11 @@ body {
   min-height: 100vh; /* ensures body is at least full viewport height */
 }
 
+#logo i {
+  display: inline;
+  padding-right: 5px;
+}
+
 #logo,
 h1,
 h2,
@@ -222,10 +227,44 @@ footer {
   color: #721c24;
   display: block;
 }
-
+#header-container {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 10000;
+}
 #chat-toast-container {
   position: fixed;
   left: 20px;
   top: 90px;
   z-index: 99999;
+}
+@media (max-width: 576px) {
+  .right-nav {
+    font-size: 0.8rem;
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+  }
+
+  /* .left-nav a {
+    display: block;
+  }
+  header .active button,
+  header button:hover {
+    border-bottom: none;
+    padding-left: 10px;
+    border-left: 2px solid white;
+  } */
+
+  #header-container {
+    margin-bottom: 10px;
+    position: static;
+  }
+  header button {
+    padding: 5px 0;
+  }
+  #header-padding {
+    display: none;
+  }
 }

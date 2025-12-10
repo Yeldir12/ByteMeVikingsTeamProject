@@ -9,25 +9,27 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
-  margin : 0 auto;
+  margin: 0 auto;
   opacity: 0.3;
 }
-.chat-container .list-group .active{
+.chat-container .list-group .active {
   background-color: var(--color-primary);
   color: var(--text-foreground);
 }
 
-.block-bold{
+.block-bold {
   display: block;
   margin-bottom: 5px;
 }
 
-.chat-container #resolveBtn, .chat-container #sendBtn{
+.chat-container #resolveBtn,
+.chat-container #sendBtn {
   background-color: var(--color-primary);
   color: var(--text-foreground);
   border-color: var(--color-compliment);
 }
-.chat-container #resolveBtn:hover, .chat-container #sendBtn:hover{
+.chat-container #resolveBtn:hover,
+.chat-container #sendBtn:hover {
   background-color: var(--color-compliment);
   color: var(--compliment-foreground);
 }
@@ -53,12 +55,12 @@
   padding: 0.5rem;
   background: #fff;
 }
-#descToggleBtn{
+#descToggleBtn {
   color: black;
 }
-#quest-description{
+#quest-description {
   margin: 10px;
-  color:#333;
+  color: #333;
 }
 .chat-message {
   margin-bottom: 1rem;
@@ -74,8 +76,8 @@
   border-radius: 20px 20px 0px 20px;
 }
 
-#chatForm textarea{
-  width:100%;
+#chatForm textarea {
+  width: 100%;
   min-height: 50px;
   max-height: 200px;
 }
@@ -96,4 +98,35 @@
 .attachments img {
   max-width: 120px;
   margin-right: 0.5rem;
+}
+
+@media (max-width: 576px) {
+  .chat-container {
+    display: flex;
+    flex-direction: column;
+    height: initial;
+  }
+
+  #chat-container {
+    height: initial !important;
+  }
+
+  .threads,
+  .chat-messages {
+    width: 100% !important;
+    max-width: 100%;
+    border-top: 2px solid gray;
+    margin-bottom: 41px;
+  }
+
+#quest-actions{
+  flex-direction: column;
+}
+.messages{
+  max-height: 85vh;
+}
+
+  main {
+    padding: 1em 0 !important;
+  }
 }
