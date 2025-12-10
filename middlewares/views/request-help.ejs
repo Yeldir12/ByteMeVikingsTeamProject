@@ -111,7 +111,7 @@
 
           const messageEl = document.getElementById("message");
           try {
-            const response = await fetch("http://localhost:3000/request-help", {
+            const response = await fetch(`${location.origin}/request-help`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ title, description, color, timeMins }),
